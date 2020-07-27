@@ -17,7 +17,7 @@ namespace WizardGrenade
         private Player _player;
 
         private Targets _targets;
-        private const int NUMBERofTARGETS = 4;
+        private const int NUMBERofTARGETS = 5;
 
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
