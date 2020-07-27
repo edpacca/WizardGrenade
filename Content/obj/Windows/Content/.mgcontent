@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/../../Graphics/target1_crop.png</File>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/corsshair.png</File>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/fireball_single.png</File>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/StatFont.spritefont</File>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/Wizard_solo.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File>target1_crop.png</File>
+    <File>crosshair.png</File>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File>wizard_solo.png</File>
+  </DestFiles>
+</SourceFileCollection>
