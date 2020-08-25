@@ -1,13 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
 
 namespace WizardGrenade
 {
@@ -33,22 +28,51 @@ namespace WizardGrenade
 
         public Vector2 NewTargetPosition()
         {
-            return new Vector2(positionGenerator.Next(10, 500), positionGenerator.Next(10, 300));
+            return new Vector2(positionGenerator.Next(10, 800), positionGenerator.Next(10, 800));
         }
         
-        
+        public bool UpdateTargetCollisions(Sprite SpriteA)
+        {
+            foreach (var target in _targets)
+            {
+                if (!target.Dead && Collision.CollisionDetected(SpriteA, target))
+                {
+                    target.Dead = true;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void UpdateTargets(GameTime gameTime)
         {
-            positionResetTimer += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (positionResetTimer > secondsBetweenReset * 1000)
+            foreach (var target in _targets)
             {
-                foreach (var target in _targets)
-                {
-                    target.Position = NewTargetPosition();
-                }
-                positionResetTimer = 0;
+                target.RandomMovement(gameTime);
+                target.RandomDirection(gameTime);
+
+                if (target.Position.X < 0)
+                    target.Position.X = 0;
+                if (target.Position.Y < 0)
+                    target.Position.Y = 0;
+                if (target.Position.X > 800)
+                    target.Position.X = 800;
+                if (target.Position.Y > 800 * 0.5625f)
+                    target.Position.Y = 800 * 0.5625f;
             }
+
+            //positionResetTimer += (int)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            //if (positionResetTimer > secondsBetweenReset * 1000)
+            //{
+            //    foreach (var target in _targets)
+            //    {
+            //        target.Position = NewTargetPosition();
+            //        target.Dead = false;
+            //    }
+
+            //    positionResetTimer = 0;
+            //}
 
         }
 

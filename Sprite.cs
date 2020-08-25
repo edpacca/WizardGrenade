@@ -26,6 +26,5 @@ namespace WizardGrenade
         }
 
         public Vector2 CalculateOrigin(Vector2 position) => new Vector2(position.X + Origin.X, position.Y + Origin.Y);
-
     }
 }

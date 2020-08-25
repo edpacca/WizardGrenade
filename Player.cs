@@ -10,10 +10,18 @@ namespace WizardGrenade
     class Player : Sprite
     {
         private readonly string _fileName = "wizard_solo";
-             
+
+        private SpriteFont _playerStatFont;
+
         private Crosshair crosshair = new Crosshair();
         private List<Grenade> _grenades = new List<Grenade>();
-        public float _grenadePower;
+        
+        private Targets _targets;
+        const int NumberOfTargets = 5;
+
+        private int Score = 0;
+
+        private float _grenadePower;
 
         private const int PLAYER_SPEED = 100;
         private const int POWER_COEFFICIENT = 400;
@@ -43,22 +51,27 @@ namespace WizardGrenade
             Right,
         }
 
-        private ActiveState State { get; set; }
-        private Direction Facing { get; set; }
+        private ActiveState State;
+        private Direction Facing;
 
-        public void LoadContent(ContentManager contentManager)
+        public void LoadContent(ContentManager content)
         {
-            _contentManager = contentManager;
+            _contentManager = content;
 
             Position = new Vector2(START_POSITION_X, START_POSITION_Y);
             _currentKeyboardState = Keyboard.GetState();
             _previousKeyboardState = _currentKeyboardState;
-            crosshair.LoadContent(contentManager);
+            crosshair.LoadContent(content);
+
+            _targets = new Targets(NumberOfTargets);
+            _targets.LoadContent(content);
+
+            _playerStatFont = content.Load<SpriteFont>("StatFont");
 
             foreach (var grenade in _grenades)
-                grenade.LoadContent(contentManager);
+                grenade.LoadContent(content);
 
-            LoadContent(contentManager, _fileName);
+            LoadContent(content, _fileName);
         }
 
         public void Update(GameTime gameTime)
@@ -66,16 +79,24 @@ namespace WizardGrenade
             _currentKeyboardState = Keyboard.GetState();
 
             UpdateMovement(_currentKeyboardState, gameTime);
+            crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, CalculateOrigin(Position));
             ChargeGrenadeThrow(_currentKeyboardState, _previousKeyboardState, gameTime);
-            
+
+            _targets.UpdateTargets(gameTime);
+
             foreach (var grenade in _grenades)
             {
                 grenade.UpdateGrenade(gameTime);
+                if (_targets.UpdateTargetCollisions(grenade))
+                {
+                    //if (grenade.InMotion)
+                    Score += 1;
+                    grenade.ThrowPower = 0;
+                    grenade.InitialTime = gameTime.TotalGameTime;
+                    grenade.InitialPosition = grenade.Position - grenade.Origin;
+                    //grenade.InMotion = false;
+                }
             }
-
-
-
-            crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, CalculateOrigin(Position));
 
             _previousKeyboardState = _currentKeyboardState;
         }
@@ -87,7 +108,6 @@ namespace WizardGrenade
                 Position.X -= PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 State = ActiveState.Walking;
                 Facing = Direction.Left;
-
             }
                 
             if (currentKeyboardState.IsKeyDown(Keys.Right))
@@ -96,7 +116,6 @@ namespace WizardGrenade
                 State = ActiveState.Walking;
                 Facing = Direction.Right;
             }
-
         }
 
         public void ChargeGrenadeThrow(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
@@ -130,6 +149,7 @@ namespace WizardGrenade
             Grenade grenade = new Grenade(grenadePower, crosshair.crosshairAngle, Position + Origin, gameTime.TotalGameTime);
             grenade.LoadContent(_contentManager);
             _grenades.Add(grenade);
+
             return;
         }
 
@@ -139,9 +159,19 @@ namespace WizardGrenade
 
             crosshair.Draw(spriteBatch);
 
-            foreach (var grenade in _grenades)
-                grenade.Draw(spriteBatch);
+            Vector2 objectText = new Vector2(10, 20);
 
+            foreach (var grenade in _grenades)
+            {
+                grenade.Draw(spriteBatch);
+                spriteBatch.DrawString(_playerStatFont, "x: " + (int)grenade.Position.X + " y: " + (int)grenade.Position.Y, objectText, Color.Orange);
+                objectText.Y += 10;
+            }
+
+            spriteBatch.DrawString(_playerStatFont, "Score: " + Score, new Vector2(720, 10), Color.Turquoise);
+            spriteBatch.DrawString(_playerStatFont, "power: " + (int)_grenadePower, new Vector2(720, 20), Color.Yellow);
+
+            _targets.DrawTargets(spriteBatch);
         }
 
     }

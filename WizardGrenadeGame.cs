@@ -16,14 +16,15 @@ namespace WizardGrenade
         
         private Player _player;
 
-        private Targets _targets;
-        private const int NUMBERofTARGETS = 5;
+        //private Targets _targets;
+        //private const int NUMBERofTARGETS = 5;
 
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
 
-        const float TargetScreenWidth = 800;
-        const float TargetScreenHeight = TargetScreenWidth * 0.5625f;
+        public const float TargetScreenWidth = 800;
+        public const float TargetScreenHeight = TargetScreenWidth * 0.5625f;
+
         private Matrix Scale;
 
         public WizardGrenadeGame()
@@ -40,9 +41,9 @@ namespace WizardGrenade
         protected override void Initialize()
         {
             _player = new Player(100, 400);
-            _targets = new Targets(NUMBERofTARGETS);
+            //_targets = new Targets(NUMBERofTARGETS);
 
-        float scaleX = _graphics.PreferredBackBufferWidth / TargetScreenWidth;
+            float scaleX = _graphics.PreferredBackBufferWidth / TargetScreenWidth;
             float scaleY = _graphics.PreferredBackBufferHeight / TargetScreenHeight;
             Scale = Matrix.CreateScale(new Vector3(scaleX, scaleY, 1));
 
@@ -54,7 +55,7 @@ namespace WizardGrenade
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _player.LoadContent(Content);
-            _targets.LoadContent(Content);
+            //_targets.LoadContent(Content);
 
             _statFont = Content.Load<SpriteFont>("StatFont");
 
@@ -62,7 +63,7 @@ namespace WizardGrenade
 
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            Content.Unload();
 
         }
 
@@ -74,7 +75,7 @@ namespace WizardGrenade
                 Exit();
 
             _player.Update(gameTime);
-            _targets.UpdateTargets(gameTime);
+            //_targets.UpdateTargets(gameTime);
               
             _previousKeyboardState = _currentKeyboardState;
             base.Update(gameTime);
@@ -94,19 +95,19 @@ namespace WizardGrenade
 
             _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, Scale);
 
-            for (int i = 0; i < 1001; i += 100)
-            {
-                for (int j = 0; j < 801; j += 100)
-                {
-                    _spriteBatch.DrawString(_statFont, "+", new Vector2(i, j), Color.Gray);
-                }
-            }
+            //for (int i = 0; i < 1001; i += 100)
+            //{
+            //    for (int j = 0; j < 801; j += 100)
+            //    {
+            //        _spriteBatch.DrawString(_statFont, "+", new Vector2(i, j), Color.Gray);
+            //    }
+            //}
 
-            _targets.DrawTargets(_spriteBatch);
+            //_targets.DrawTargets(_spriteBatch);
             _player.Draw(_spriteBatch);
 
 
-            _spriteBatch.DrawString(_statFont, "power: " + _player._grenadePower, new Vector2(10, 10), Color.Turquoise);
+            
 
             _spriteBatch.End();
 

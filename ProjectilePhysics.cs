@@ -20,8 +20,6 @@ namespace WizardGrenade
 
         public static Vector2 UpdateRelativeProjectilePosition(Vector2 vectorComponents, GameTime gameTime, TimeSpan startTime, float mass)
         {
-
-
             float rel_pos_X = vectorComponents.X *  (float)(gameTime.TotalGameTime.TotalSeconds - startTime.TotalSeconds);
             float rel_pos_Y = (vectorComponents.Y * (float)(gameTime.TotalGameTime.TotalSeconds - startTime.TotalSeconds)
                 + (GRAVITY * mass / 2 * (float)Math.Pow((float)(gameTime.TotalGameTime.TotalSeconds - startTime.TotalSeconds), 2)));
