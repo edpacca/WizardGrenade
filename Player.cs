@@ -23,7 +23,7 @@ namespace WizardGrenade
 
         private float _grenadePower;
 
-        private const int PLAYER_SPEED = 100;
+        public const int PLAYER_SPEED = 100;
         private const int POWER_COEFFICIENT = 400;
 
         private int START_POSITION_X;
@@ -91,7 +91,7 @@ namespace WizardGrenade
                 {
                     //if (grenade.InMotion)
                     Score += 1;
-                    grenade.ThrowPower = 0;
+                    grenade.ThrowPower = grenade.ThrowPower / 10;
                     grenade.InitialTime = gameTime.TotalGameTime;
                     grenade.InitialPosition = grenade.Position - grenade.Origin;
                     //grenade.InMotion = false;
@@ -106,6 +106,10 @@ namespace WizardGrenade
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
                 Position.X -= PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (Position.X < 308)
+                    Position.X = 308;
+
                 State = ActiveState.Walking;
                 Facing = Direction.Left;
             }
@@ -113,6 +117,9 @@ namespace WizardGrenade
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
                 Position.X += PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (Position.X > 460)
+                    Position.X = 460;
+
                 State = ActiveState.Walking;
                 Facing = Direction.Right;
             }

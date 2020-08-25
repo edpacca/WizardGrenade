@@ -56,3 +56,4 @@ C:\Users\eddie\Documents\OneDrive\Computer Science\WizardGrenade\WizardGrenade\b
 C:\Users\eddie\Documents\OneDrive\Computer Science\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.csproj.CopyComplete
 C:\Users\eddie\Documents\OneDrive\Computer Science\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\target1_crop.xnb
 C:\Users\eddie\OneDrive\Computer Science\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\target1_crop.xnb
+C:\Users\eddie\OneDrive\Computer Science\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\castle.xnb

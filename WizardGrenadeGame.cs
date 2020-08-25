@@ -13,17 +13,18 @@ namespace WizardGrenade
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteFont _statFont;
-        
-        private Player _player;
 
-        //private Targets _targets;
-        //private const int NUMBERofTARGETS = 5;
+        private Castle _castle;
+        private Player _player;
 
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
 
-        public const float TargetScreenWidth = 800;
-        public const float TargetScreenHeight = TargetScreenWidth * 0.5625f;
+        private const float TargetScreenWidth = 800;
+        private const float TargetScreenHeight = TargetScreenWidth * 0.5625f;
+        public const int SCREEN_WIDTH = (int)TargetScreenWidth;
+        public const int SCREEN_HEIGHT = (int)TargetScreenHeight;
+
 
         private Matrix Scale;
 
@@ -40,8 +41,8 @@ namespace WizardGrenade
 
         protected override void Initialize()
         {
-            _player = new Player(100, 400);
-            //_targets = new Targets(NUMBERofTARGETS);
+            _player = new Player(SCREEN_WIDTH / 2, 348);
+            _castle = new Castle();
 
             float scaleX = _graphics.PreferredBackBufferWidth / TargetScreenWidth;
             float scaleY = _graphics.PreferredBackBufferHeight / TargetScreenHeight;
@@ -53,9 +54,8 @@ namespace WizardGrenade
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             _player.LoadContent(Content);
-            //_targets.LoadContent(Content);
+            _castle.LoadContent(Content);
 
             _statFont = Content.Load<SpriteFont>("StatFont");
 
@@ -64,7 +64,6 @@ namespace WizardGrenade
         protected override void UnloadContent()
         {
             Content.Unload();
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -75,8 +74,7 @@ namespace WizardGrenade
                 Exit();
 
             _player.Update(gameTime);
-            //_targets.UpdateTargets(gameTime);
-              
+
             _previousKeyboardState = _currentKeyboardState;
             base.Update(gameTime);
         }
@@ -105,9 +103,7 @@ namespace WizardGrenade
 
             //_targets.DrawTargets(_spriteBatch);
             _player.Draw(_spriteBatch);
-
-
-            
+            _castle.Draw(_spriteBatch);
 
             _spriteBatch.End();
 

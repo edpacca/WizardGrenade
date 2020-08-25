@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
+
 namespace WizardGrenade
 {
     class Targets
@@ -28,7 +29,7 @@ namespace WizardGrenade
 
         public Vector2 NewTargetPosition()
         {
-            return new Vector2(positionGenerator.Next(10, 800), positionGenerator.Next(10, 800));
+            return new Vector2(positionGenerator.Next(10, WizardGrenadeGame.SCREEN_WIDTH), positionGenerator.Next(10, WizardGrenadeGame.SCREEN_HEIGHT));
         }
         
         public bool UpdateTargetCollisions(Sprite SpriteA)
@@ -55,10 +56,10 @@ namespace WizardGrenade
                     target.Position.X = 0;
                 if (target.Position.Y < 0)
                     target.Position.Y = 0;
-                if (target.Position.X > 800)
-                    target.Position.X = 800;
-                if (target.Position.Y > 800 * 0.5625f)
-                    target.Position.Y = 800 * 0.5625f;
+                if (target.Position.X > WizardGrenadeGame.SCREEN_WIDTH)
+                    target.Position.X = WizardGrenadeGame.SCREEN_WIDTH;
+                if (target.Position.Y > WizardGrenadeGame.SCREEN_HEIGHT - 100)
+                    target.Position.Y = WizardGrenadeGame.SCREEN_HEIGHT - 100;
             }
 
             //positionResetTimer += (int)gameTime.ElapsedGameTime.TotalMilliseconds;

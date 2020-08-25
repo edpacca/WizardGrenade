@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Castle.cs" />
     <Compile Include="Collision.cs" />
     <Compile Include="Crosshair.cs" />
     <Compile Include="ProjectilePhysics.cs" />
