@@ -57,3 +57,4 @@ C:\Users\eddie\Documents\OneDrive\Computer Science\WizardGrenade\WizardGrenade\o
 C:\Users\eddie\Documents\OneDrive\Computer Science\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\target1_crop.xnb
 C:\Users\eddie\OneDrive\Computer Science\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\target1_crop.xnb
 C:\Users\eddie\OneDrive\Computer Science\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\castle.xnb
+C:\Users\eddie\Documents\OneDrive\Computer Science\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\castle.xnb

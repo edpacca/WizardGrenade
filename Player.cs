@@ -19,6 +19,12 @@ namespace WizardGrenade
         private Targets _targets;
         const int NumberOfTargets = 5;
 
+        private RoundTimer _rounds;
+        private int _numberOfRounds = 3;
+        private float _roundLength = 16;
+        private float _countDownLength = 3;
+        private bool _gameOver = false;
+
         private int Score = 0;
 
         private float _grenadePower;
@@ -66,6 +72,9 @@ namespace WizardGrenade
             _targets = new Targets(NumberOfTargets);
             _targets.LoadContent(content);
 
+            _rounds = new RoundTimer(_numberOfRounds, _roundLength, _countDownLength);
+            _rounds.LoadContent(content);
+
             _playerStatFont = content.Load<SpriteFont>("StatFont");
 
             foreach (var grenade in _grenades)
@@ -78,11 +87,31 @@ namespace WizardGrenade
         {
             _currentKeyboardState = Keyboard.GetState();
 
+
+
+
             UpdateMovement(_currentKeyboardState, gameTime);
             crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, CalculateOrigin(Position));
-            ChargeGrenadeThrow(_currentKeyboardState, _previousKeyboardState, gameTime);
+
+            if (_rounds.roundActive)
+                ChargeGrenadeThrow(_currentKeyboardState, _previousKeyboardState, gameTime);
+
+            _rounds.update(gameTime);
+
+            if (_rounds.CurrentRound > _numberOfRounds)
+            {
+                _targets.KillTargets();
+                _gameOver = true;
+
+            }
 
             _targets.UpdateTargets(gameTime);
+
+            if (_rounds.newRound)
+            {
+                _rounds.newRound = false;
+                _targets.ResetTargets();
+            }
 
             foreach (var grenade in _grenades)
             {
@@ -90,7 +119,7 @@ namespace WizardGrenade
                 if (_targets.UpdateTargetCollisions(grenade))
                 {
                     //if (grenade.InMotion)
-                    Score += 1;
+                    Score += (int)_rounds.TimeScoreMultiplier() * 5;
                     grenade.ThrowPower = grenade.ThrowPower / 10;
                     grenade.InitialTime = gameTime.TotalGameTime;
                     grenade.InitialPosition = grenade.Position - grenade.Origin;
@@ -166,17 +195,22 @@ namespace WizardGrenade
 
             crosshair.Draw(spriteBatch);
 
-            Vector2 objectText = new Vector2(10, 20);
+            //Vector2 objectText = new Vector2(10, 20);
 
             foreach (var grenade in _grenades)
             {
                 grenade.Draw(spriteBatch);
-                spriteBatch.DrawString(_playerStatFont, "x: " + (int)grenade.Position.X + " y: " + (int)grenade.Position.Y, objectText, Color.Orange);
-                objectText.Y += 10;
+                //spriteBatch.DrawString(_playerStatFont, "x: " + (int)grenade.Position.X + " y: " + (int)grenade.Position.Y, objectText, Color.Orange);
+                //objectText.Y += 10;
             }
 
-            spriteBatch.DrawString(_playerStatFont, "Score: " + Score, new Vector2(720, 10), Color.Turquoise);
-            spriteBatch.DrawString(_playerStatFont, "power: " + (int)_grenadePower, new Vector2(720, 20), Color.Yellow);
+            spriteBatch.DrawString(_playerStatFont, "Score: " + Score, new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 140, WizardGrenadeGame.SCREEN_HEIGHT - 80), Color.Turquoise);
+            spriteBatch.DrawString(_playerStatFont, "power: " + (int)_grenadePower, new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 140, WizardGrenadeGame.SCREEN_HEIGHT - 50), Color.Yellow);
+
+            if (_gameOver)
+                spriteBatch.DrawString(_playerStatFont, "FINAL SCORE: " + Score, new Vector2(WizardGrenadeGame.SCREEN_WIDTH / 2 - 120, WizardGrenadeGame.SCREEN_HEIGHT / 2), Color.HotPink);
+            else
+                _rounds.DrawTimer(spriteBatch);
 
             _targets.DrawTargets(spriteBatch);
         }

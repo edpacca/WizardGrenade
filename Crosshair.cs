@@ -37,5 +37,10 @@ namespace WizardGrenade
             if (currentKeyboardState.IsKeyDown(Keys.Down))
                 crosshairAngle -= AIM_SPEED * gameTime.ElapsedGameTime.TotalSeconds;
         }
+
+        public void FlipCrossHair()
+        {
+
+        }
     }
 }

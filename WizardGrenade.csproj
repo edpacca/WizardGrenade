@@ -46,6 +46,7 @@
     <Compile Include="Crosshair.cs" />
     <Compile Include="ProjectilePhysics.cs" />
     <Compile Include="Animation.cs" />
+    <Compile Include="RoundTimer.cs" />
     <Compile Include="Target.cs" />
     <Compile Include="Targets.cs" />
     <Compile Include="WizardGrenadeGame.cs" />

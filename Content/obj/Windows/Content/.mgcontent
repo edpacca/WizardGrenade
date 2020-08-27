@@ -4,12 +4,12 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/eddie/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/../../Graphics/target1_crop.png</File>
-    <File>C:/Users/eddie/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/castle.png</File>
-    <File>C:/Users/eddie/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/corsshair.png</File>
-    <File>C:/Users/eddie/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/fireball_single.png</File>
-    <File>C:/Users/eddie/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/StatFont.spritefont</File>
-    <File>C:/Users/eddie/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/Wizard_solo.png</File>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/../../Graphics/target1_crop.png</File>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/castle.png</File>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/corsshair.png</File>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/fireball_single.png</File>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/StatFont.spritefont</File>
+    <File>C:/Users/eddie/Documents/OneDrive/Computer Science/WizardGrenade/WizardGrenade/Content/Wizard_solo.png</File>
   </SourceFiles>
   <DestFiles>
     <File>target1_crop.png</File>

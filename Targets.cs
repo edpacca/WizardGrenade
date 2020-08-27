@@ -77,6 +77,20 @@ namespace WizardGrenade
 
         }
 
+        public void ResetTargets()
+        {
+            foreach (var target in _targets)
+                target.Dead = false;
+        }
+
+        public void KillTargets()
+        {
+            foreach (var target in _targets)
+            {
+                target.Dead = true;
+            }
+        }
+
         public void DrawTargets(SpriteBatch spriteBatch)
         {
             foreach (var target in _targets)
