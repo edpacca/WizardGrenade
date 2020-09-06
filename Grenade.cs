@@ -14,6 +14,7 @@ namespace WizardGrenade
         private TimeSpan _initialTime;
         private Vector2 _initialPosition;
 
+        public bool hitSignal = false;
         public bool InMotion { get; set; }
         public float ThrowPower { get; set; }
         public double ThrowAngle { get; set; }
@@ -37,7 +38,10 @@ namespace WizardGrenade
                     ProjectilePhysics.CalcProjectileVelocityComponents(ThrowAngle, ThrowPower), gameTime, InitialTime, MASS);
 
                 if (Vector2.Distance(InitialPosition, Position) > MAX_DISTANCE)
+                {
                     InMotion = false;
+                    hitSignal = false;
+                }
 
             }
         }

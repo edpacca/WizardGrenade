@@ -26,5 +26,11 @@ namespace WizardGrenade
 
             return new Vector2(rel_pos_X, rel_pos_Y);
         }
+
+        public static double FlipAngle(double initialAngle)
+        {
+            double flippedAngle = Math.PI + (Math.PI - initialAngle);
+            return flippedAngle;
+        }
     }
 }

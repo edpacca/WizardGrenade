@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace WizardGrenade
@@ -28,6 +29,11 @@ namespace WizardGrenade
         private KeyboardState _previousKeyboardState;
 
         public bool activePlayer = false;
+        public bool hit = false;
+        private float hitTimer;
+        private float hitTimeOut = 500;
+
+        public int playerScore;
 
         public Player(int startx, int starty)
         {
@@ -39,13 +45,18 @@ namespace WizardGrenade
         {
             Walking,
             Idle,
+            Charging,
+            Throwing,
         }
 
         private enum Direction
         {
+            None,
             Left,
             Right,
         }
+
+        private int directionCoeff = 1;
 
         private ActiveState State;
         private Direction Facing;
@@ -70,13 +81,28 @@ namespace WizardGrenade
         {
             _currentKeyboardState = Keyboard.GetState();
 
-            UpdateMovement(_currentKeyboardState, gameTime);
-            crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, CalculateOrigin(Position));
+            if (activePlayer)
+            {
+                UpdateMovement(_currentKeyboardState, gameTime);
 
-            ChargeGrenadeThrow(_currentKeyboardState, _previousKeyboardState, gameTime);
+                crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, CalculateOrigin(Position), directionCoeff);
 
-            foreach (var grenade in _grenades)
-                grenade.UpdateGrenade(gameTime);
+                ChargeGrenadeThrow(_currentKeyboardState, _previousKeyboardState, gameTime);
+
+                foreach (var grenade in _grenades)
+                    grenade.UpdateGrenade(gameTime);
+            }
+
+
+            if (hit)
+            {
+                hitTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (hitTimer > hitTimeOut)
+                {
+                    hit = false;
+                    hitTimer = 0;
+                }
+            }
 
             _previousKeyboardState = _currentKeyboardState;
         }
@@ -85,30 +111,49 @@ namespace WizardGrenade
         {
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
+                State = ActiveState.Walking;
                 Position.X -= PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                State = ActiveState.Walking;
+                if (Facing != Direction.Left)
+                    crosshair.crosshairAngle = (ProjectilePhysics.FlipAngle(crosshair.crosshairAngle));
+
                 Facing = Direction.Left;
+                directionCoeff = -1;
+
             }
-                
-            if (currentKeyboardState.IsKeyDown(Keys.Right))
+
+            else if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
+                State = ActiveState.Walking;
                 Position.X += PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                State = ActiveState.Walking;
+                if (Facing != Direction.Right)
+                    crosshair.crosshairAngle = (ProjectilePhysics.FlipAngle(crosshair.crosshairAngle));
+
                 Facing = Direction.Right;
+                directionCoeff = 1;
+
             }
+            else
+                State = ActiveState.Idle;
         }
 
         public void ChargeGrenadeThrow(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
         {
+
+
             if (currentKeyboardState.IsKeyDown(Keys.Space) && _grenadePower < 500)
+            {
+                State = ActiveState.Charging;
                 _grenadePower += (float)gameTime.ElapsedGameTime.TotalSeconds * POWER_COEFFICIENT;
+            }
+
 
             if (WizardGrenadeGame.KeysReleased(currentKeyboardState, previousKeyboardState, Keys.Space))
             {
                 ThrowGrenade(_grenadePower, gameTime);
                 _grenadePower = 0;
+                State = ActiveState.Throwing;
             }
         }
 
@@ -144,16 +189,30 @@ namespace WizardGrenade
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            if (hit)
+                base.DrawHit(spriteBatch);
+            else
+                base.Draw(spriteBatch);
 
-            crosshair.Draw(spriteBatch);
+            if (activePlayer)
+            {
+                if (State != ActiveState.Walking)
+                    crosshair.Draw(spriteBatch);
+                
+                spriteBatch.DrawString(_playerStatFont, "power: " + (int)_grenadePower, 
+                    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, WizardGrenadeGame.SCREEN_HEIGHT - 50), Color.Yellow);
+
+                spriteBatch.DrawString(_playerStatFont, "state: " + State,
+    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, WizardGrenadeGame.SCREEN_HEIGHT - 70), Color.Yellow);
+            }
+
 
             foreach (var grenade in _grenades)
             {
                 grenade.Draw(spriteBatch);
             }
 
-            spriteBatch.DrawString(_playerStatFont, "power: " + (int)_grenadePower, new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 140, WizardGrenadeGame.SCREEN_HEIGHT - 50), Color.Yellow);
+            
         }
 
     }

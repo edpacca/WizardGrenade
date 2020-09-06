@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Wizard_solo.png</SourceFile>
+  <SourceFile>C:/Users/eddie/Documents/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Wizard_solo.png</SourceFile>
   <SourceTime>2020-05-27T13:48:40+01:00</SourceTime>
-  <DestFile>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/bin/Windows/Content/wizard_solo.xnb</DestFile>
-  <DestTime>2020-09-06T11:51:46.5989531+01:00</DestTime>
+  <DestFile>C:/Users/eddie/Documents/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/bin/Windows/Content/wizard_solo.xnb</DestFile>
+  <DestTime>2020-09-06T20:46:39.1523403+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2018-12-08T16:35:54+00:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
