@@ -58,3 +58,33 @@ C:\Users\eddie\Documents\OneDrive\Computer Science\WizardGrenade\WizardGrenade\b
 C:\Users\eddie\OneDrive\Computer Science\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\target1_crop.xnb
 C:\Users\eddie\OneDrive\Computer Science\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\castle.xnb
 C:\Users\eddie\Documents\OneDrive\Computer Science\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\castle.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\corsshair.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\castle.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\crosshair.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\fireball_single.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\StatFont.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\target1_crop.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\wizard_solo.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\WizardGrenade.exe
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\WizardGrenade.pdb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\MonoGame.Framework.dll
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.MediaFoundation.dll
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.dll
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.XAudio2.dll
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.DXGI.dll
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.Direct3D11.dll
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.Direct2D1.dll
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.XInput.dll
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\MonoGame.Framework.xml
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.MediaFoundation.xml
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.xml
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.XAudio2.xml
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.DXGI.xml
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.Direct3D11.xml
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\SharpDX.XInput.xml
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.csprojAssemblyReference.cache
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.csproj.CoreCompileInputs.cache
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.csproj.CopyComplete
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.exe
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.pdb

@@ -13,12 +13,18 @@ namespace WizardGrenade
         private List<Target> _targets = new List<Target>();
         private int positionResetTimer = 0;
 
+        private int activeTargets;
+
         private const int secondsBetweenReset = 10;
+
+        public int ActiveTargets { get => activeTargets; set => activeTargets = value; }
 
         public Targets(int numberOfTargets)
         {
             for (int i = 0; i < numberOfTargets; i++)
                 _targets.Add(new Target(positionGenerator.Next()));
+
+            ActiveTargets = numberOfTargets;
         }
 
         public void LoadContent(ContentManager content)
@@ -39,6 +45,7 @@ namespace WizardGrenade
                 if (!target.Dead && Collision.CollisionDetected(SpriteA, target))
                 {
                     target.Dead = true;
+                    ActiveTargets--;
                     return true;
                 }
             }

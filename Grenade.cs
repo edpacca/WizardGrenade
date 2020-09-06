@@ -47,8 +47,6 @@ namespace WizardGrenade
             }
         }
 
-
-
         public void LoadContent(ContentManager contentManager)
         {
             LoadContent(contentManager, _filename);

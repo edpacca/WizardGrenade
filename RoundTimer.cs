@@ -39,7 +39,7 @@ namespace WizardGrenade
 
         public void update(GameTime gameTime)
         {
-            if (roundActive)
+            if (roundActive && CurrentRound <= _numberOfRounds)
             {
                 roundTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
 

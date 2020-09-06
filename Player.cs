@@ -21,9 +21,10 @@ namespace WizardGrenade
 
         private RoundTimer _rounds;
         private int _numberOfRounds = 3;
-        private float _roundLength = 16;
+        private float _roundLength = 36;
         private float _countDownLength = 3;
         private bool _gameOver = false;
+        private bool _allTargetsDead = false;
 
         private int Score = 0;
 
@@ -87,9 +88,6 @@ namespace WizardGrenade
         {
             _currentKeyboardState = Keyboard.GetState();
 
-
-
-
             UpdateMovement(_currentKeyboardState, gameTime);
             crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, CalculateOrigin(Position));
 
@@ -102,14 +100,24 @@ namespace WizardGrenade
             {
                 _targets.KillTargets();
                 _gameOver = true;
-
             }
 
             _targets.UpdateTargets(gameTime);
 
+            if (_targets.ActiveTargets < 1)
+            {
+                _allTargetsDead = true;
+                _rounds.newRound = true;
+            }
+
             if (_rounds.newRound)
             {
+                if (_allTargetsDead)
+                    Score += 500;
+
                 _rounds.newRound = false;
+                _allTargetsDead = false;
+                _targets.ActiveTargets = NumberOfTargets;
                 _targets.ResetTargets();
             }
 
@@ -123,6 +131,7 @@ namespace WizardGrenade
                     grenade.ThrowPower = grenade.ThrowPower / 10;
                     grenade.InitialTime = gameTime.TotalGameTime;
                     grenade.InitialPosition = grenade.Position - grenade.Origin;
+
                     //grenade.InMotion = false;
                 }
             }

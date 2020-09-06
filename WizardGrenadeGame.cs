@@ -93,6 +93,7 @@ namespace WizardGrenade
 
             _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, Scale);
 
+            // REFERENCE CROSSHAIRS
             //for (int i = 0; i < 1001; i += 100)
             //{
             //    for (int j = 0; j < 801; j += 100)
