@@ -5,6 +5,7 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/../../Graphics/target1_crop.png</File>
+    <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/ActivePlayer.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/castle.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/corsshair.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/fireball_single.png</File>
@@ -13,6 +14,7 @@
   </SourceFiles>
   <DestFiles>
     <File>target1_crop.png</File>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File>crosshair.png</File>
     <File xsi:nil="true" />

@@ -88,3 +88,4 @@ C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debu
 C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.csproj.CopyComplete
 C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.exe
 C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.pdb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\ActivePlayer.xnb

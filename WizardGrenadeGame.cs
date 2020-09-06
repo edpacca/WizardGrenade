@@ -1,10 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace WizardGrenade
 {
@@ -12,19 +8,18 @@ namespace WizardGrenade
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private SpriteFont _statFont;
 
-        private Castle _castle;
-        private Player _player;
+        private GameScreen gameScreen;
 
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
 
+        private const int ScreenResolutionWidth = 1920;
+        private const int ScreenResolutionHeight = 1080;
         private const float TargetScreenWidth = 800;
         private const float TargetScreenHeight = TargetScreenWidth * 0.5625f;
         public const int SCREEN_WIDTH = (int)TargetScreenWidth;
         public const int SCREEN_HEIGHT = (int)TargetScreenHeight;
-
 
         private Matrix Scale;
 
@@ -33,16 +28,16 @@ namespace WizardGrenade
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            _graphics.PreferredBackBufferWidth = 1920;
-            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.PreferredBackBufferWidth = ScreenResolutionWidth;
+            _graphics.PreferredBackBufferHeight = ScreenResolutionHeight;
 
             Window.AllowUserResizing = true;
         }
 
         protected override void Initialize()
         {
-            _player = new Player(SCREEN_WIDTH / 2, 348);
-            _castle = new Castle();
+            gameScreen = new GameScreen();
+            gameScreen.Initialize();
 
             float scaleX = _graphics.PreferredBackBufferWidth / TargetScreenWidth;
             float scaleY = _graphics.PreferredBackBufferHeight / TargetScreenHeight;
@@ -54,10 +49,7 @@ namespace WizardGrenade
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            _player.LoadContent(Content);
-            _castle.LoadContent(Content);
-
-            _statFont = Content.Load<SpriteFont>("StatFont");
+            gameScreen.LoadContent(Content);
 
         }
 
@@ -73,9 +65,10 @@ namespace WizardGrenade
             if (_currentKeyboardState.IsKeyDown(Keys.Escape))
                 Exit();
 
-            _player.Update(gameTime);
+            gameScreen.Update(gameTime);
 
             _previousKeyboardState = _currentKeyboardState;
+
             base.Update(gameTime);
         }
 
@@ -93,18 +86,7 @@ namespace WizardGrenade
 
             _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, Scale);
 
-            // REFERENCE CROSSHAIRS
-            //for (int i = 0; i < 1001; i += 100)
-            //{
-            //    for (int j = 0; j < 801; j += 100)
-            //    {
-            //        _spriteBatch.DrawString(_statFont, "+", new Vector2(i, j), Color.Gray);
-            //    }
-            //}
-
-            //_targets.DrawTargets(_spriteBatch);
-            _player.Draw(_spriteBatch);
-            _castle.Draw(_spriteBatch);
+            gameScreen.Draw(_spriteBatch);
 
             _spriteBatch.End();
 

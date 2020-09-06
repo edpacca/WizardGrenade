@@ -20,7 +20,6 @@ namespace WizardGrenade
         {
             LoadContent(contentManager, _fileName);
             Position = new Vector2((WizardGrenadeGame.SCREEN_WIDTH / 2) - Size.Width / 2, WizardGrenadeGame.SCREEN_HEIGHT - Size.Height);
-
         }
 
         public override void Draw(SpriteBatch spriteBatch)

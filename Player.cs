@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
 
 namespace WizardGrenade
@@ -14,20 +13,8 @@ namespace WizardGrenade
         private SpriteFont _playerStatFont;
 
         private Crosshair crosshair = new Crosshair();
-        private List<Grenade> _grenades = new List<Grenade>();
+        public List<Grenade> _grenades = new List<Grenade>();
         
-        private Targets _targets;
-        const int NumberOfTargets = 5;
-
-        private RoundTimer _rounds;
-        private int _numberOfRounds = 3;
-        private float _roundLength = 36;
-        private float _countDownLength = 3;
-        private bool _gameOver = false;
-        private bool _allTargetsDead = false;
-
-        private int Score = 0;
-
         private float _grenadePower;
 
         public const int PLAYER_SPEED = 100;
@@ -39,6 +26,8 @@ namespace WizardGrenade
         private ContentManager _contentManager;
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
+
+        public bool activePlayer = false;
 
         public Player(int startx, int starty)
         {
@@ -64,17 +53,10 @@ namespace WizardGrenade
         public void LoadContent(ContentManager content)
         {
             _contentManager = content;
-
             Position = new Vector2(START_POSITION_X, START_POSITION_Y);
             _currentKeyboardState = Keyboard.GetState();
             _previousKeyboardState = _currentKeyboardState;
             crosshair.LoadContent(content);
-
-            _targets = new Targets(NumberOfTargets);
-            _targets.LoadContent(content);
-
-            _rounds = new RoundTimer(_numberOfRounds, _roundLength, _countDownLength);
-            _rounds.LoadContent(content);
 
             _playerStatFont = content.Load<SpriteFont>("StatFont");
 
@@ -91,50 +73,10 @@ namespace WizardGrenade
             UpdateMovement(_currentKeyboardState, gameTime);
             crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, CalculateOrigin(Position));
 
-            if (_rounds.roundActive)
-                ChargeGrenadeThrow(_currentKeyboardState, _previousKeyboardState, gameTime);
-
-            _rounds.update(gameTime);
-
-            if (_rounds.CurrentRound > _numberOfRounds)
-            {
-                _targets.KillTargets();
-                _gameOver = true;
-            }
-
-            _targets.UpdateTargets(gameTime);
-
-            if (_targets.ActiveTargets < 1)
-            {
-                _allTargetsDead = true;
-                _rounds.newRound = true;
-            }
-
-            if (_rounds.newRound)
-            {
-                if (_allTargetsDead)
-                    Score += 500;
-
-                _rounds.newRound = false;
-                _allTargetsDead = false;
-                _targets.ActiveTargets = NumberOfTargets;
-                _targets.ResetTargets();
-            }
+            ChargeGrenadeThrow(_currentKeyboardState, _previousKeyboardState, gameTime);
 
             foreach (var grenade in _grenades)
-            {
                 grenade.UpdateGrenade(gameTime);
-                if (_targets.UpdateTargetCollisions(grenade))
-                {
-                    //if (grenade.InMotion)
-                    Score += (int)_rounds.TimeScoreMultiplier() * 5;
-                    grenade.ThrowPower = grenade.ThrowPower / 10;
-                    grenade.InitialTime = gameTime.TotalGameTime;
-                    grenade.InitialPosition = grenade.Position - grenade.Origin;
-
-                    //grenade.InMotion = false;
-                }
-            }
 
             _previousKeyboardState = _currentKeyboardState;
         }
@@ -145,9 +87,6 @@ namespace WizardGrenade
             {
                 Position.X -= PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                if (Position.X < 308)
-                    Position.X = 308;
-
                 State = ActiveState.Walking;
                 Facing = Direction.Left;
             }
@@ -155,8 +94,6 @@ namespace WizardGrenade
             if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
                 Position.X += PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (Position.X > 460)
-                    Position.X = 460;
 
                 State = ActiveState.Walking;
                 Facing = Direction.Right;
@@ -173,6 +110,13 @@ namespace WizardGrenade
                 ThrowGrenade(_grenadePower, gameTime);
                 _grenadePower = 0;
             }
+        }
+
+        public void GrenadeCollisionResolution(Grenade grenade, GameTime gameTime)
+        {
+            grenade.ThrowPower = grenade.ThrowPower / 10;
+            grenade.InitialTime = gameTime.TotalGameTime;
+            grenade.InitialPosition = grenade.Position - grenade.Origin;
         }
 
         // getter and setters
@@ -204,24 +148,12 @@ namespace WizardGrenade
 
             crosshair.Draw(spriteBatch);
 
-            //Vector2 objectText = new Vector2(10, 20);
-
             foreach (var grenade in _grenades)
             {
                 grenade.Draw(spriteBatch);
-                //spriteBatch.DrawString(_playerStatFont, "x: " + (int)grenade.Position.X + " y: " + (int)grenade.Position.Y, objectText, Color.Orange);
-                //objectText.Y += 10;
             }
 
-            spriteBatch.DrawString(_playerStatFont, "Score: " + Score, new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 140, WizardGrenadeGame.SCREEN_HEIGHT - 80), Color.Turquoise);
             spriteBatch.DrawString(_playerStatFont, "power: " + (int)_grenadePower, new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 140, WizardGrenadeGame.SCREEN_HEIGHT - 50), Color.Yellow);
-
-            if (_gameOver)
-                spriteBatch.DrawString(_playerStatFont, "FINAL SCORE: " + Score, new Vector2(WizardGrenadeGame.SCREEN_WIDTH / 2 - 120, WizardGrenadeGame.SCREEN_HEIGHT / 2), Color.HotPink);
-            else
-                _rounds.DrawTimer(spriteBatch);
-
-            _targets.DrawTargets(spriteBatch);
         }
 
     }

@@ -44,6 +44,8 @@
     <Compile Include="Castle.cs" />
     <Compile Include="Collision.cs" />
     <Compile Include="Crosshair.cs" />
+    <Compile Include="GameScreen.cs" />
+    <Compile Include="PlayerMarker.cs" />
     <Compile Include="ProjectilePhysics.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="RoundTimer.cs" />
