@@ -10,11 +10,8 @@ namespace WizardGrenade
     {
         private Random positionGenerator = new Random();
         private List<Target> _targets = new List<Target>();
-        private int positionResetTimer = 0;
 
         private int activeTargets;
-
-        private const int secondsBetweenReset = 10;
 
         public int ActiveTargets { get => activeTargets; set => activeTargets = value; }
 

@@ -35,8 +35,8 @@ namespace WizardGrenade
         private float hitTimer;
         private float hitTimeOut = 500;
 
-        private bool alive = true;
-        private int health;
+        public bool alive = true;
+        public int health;
 
         public Player(int startx, int starty, int startHealth, int spriteVersion)
         {
@@ -107,12 +107,12 @@ namespace WizardGrenade
 
             if (hit)
             {
-                health -= 25;
+                health -= 0;
+                hit = false;
 
                 hitTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (hitTimer > hitTimeOut)
                 {
-                    hit = false;
                     hitTimer = 0;
                 }
             }
@@ -170,12 +170,6 @@ namespace WizardGrenade
             }
         }
 
-        public void GrenadeCollisionResolution(Grenade grenade, GameTime gameTime)
-        {
-            grenade.ThrowPower = grenade.ThrowPower / 10;
-            grenade.InitialTime = gameTime.TotalGameTime;
-            grenade.InitialPosition = grenade.Position - grenade.Origin;
-        }
 
         // getter and setters
         public void ThrowGrenade(float grenadePower, GameTime gameTime)
@@ -189,6 +183,7 @@ namespace WizardGrenade
                     dormantGrenade.InitialTime = gameTime.TotalGameTime;
                     dormantGrenade.InitialPosition = Position + Origin - dormantGrenade.Origin;
                     dormantGrenade.InMotion = true;
+                    dormantGrenade.hitSignal = false;
                     return;
                 }
             }
@@ -203,7 +198,12 @@ namespace WizardGrenade
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (hit)
+            {
                 base.DrawHit(spriteBatch);
+                spriteBatch.DrawString(_healthFont, health.ToString(),
+                    new Vector2(Position.X + 8, Position.Y - 15), Color.Red);
+            }
+
             else if (alive)
                 base.Draw(spriteBatch);
 
@@ -217,8 +217,22 @@ namespace WizardGrenade
 
                 spriteBatch.DrawString(_playerStatFont, "state: " + State,
                     new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, WizardGrenadeGame.SCREEN_HEIGHT - 70), Color.Yellow);
+
+                var pos = 10;
+                foreach (var grenade in _grenades)
+                {
+                    spriteBatch.DrawString(_healthFont, "G" + _grenades.IndexOf(grenade) + ": " + (int)grenade.Position.X + ", " + (int)grenade.Position.Y,
+                        new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, pos), Color.Yellow);
+                    pos += 10;
+                    spriteBatch.DrawString(_healthFont, "G" + _grenades.IndexOf(grenade) + ": " + grenade.ThrowAngle.ToString("0.0"),
+                        new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, pos), Color.Yellow);
+                    pos += 10;
+                    spriteBatch.DrawString(_healthFont, "G" + _grenades.IndexOf(grenade) + ": " + grenade.indidentAngle.X + ", " + grenade.indidentAngle.Y,
+                        new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, pos), Color.Yellow);
+                    pos += 10;
+                }
             }
-            else
+            else if (!activePlayer && alive && !hit)
                 spriteBatch.DrawString(_healthFont, health.ToString(),
                     new Vector2(Position.X + 8, Position.Y - 15), Color.White);
 

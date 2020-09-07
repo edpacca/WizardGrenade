@@ -10,7 +10,6 @@ namespace WizardGrenade
         private readonly string _fileName = "target1_crop";
 
         private bool _dead;
-        private bool _justMoved;
         private int movementTimer = 0;
         private int movementReset = 3;
         private int movementXCoefficient;

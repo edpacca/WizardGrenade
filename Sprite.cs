@@ -5,7 +5,7 @@ using System;
 
 namespace WizardGrenade
 {
-    class Sprite
+    public class Sprite
     {
         public Vector2 Position = new Vector2(0, 0);
         public Vector2 Origin;

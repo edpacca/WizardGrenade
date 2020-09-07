@@ -1,10 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
 
 namespace WizardGrenade
 {
@@ -20,9 +14,16 @@ namespace WizardGrenade
             {
                 return false;
             }
-
-
             return true;
         }
+
+        public static Rectangle CollisionRectangle(Sprite spriteA, Sprite spriteB)
+        {
+            Rectangle rectangleA = new Rectangle((int)spriteA.Position.X, (int)spriteA.Position.Y, spriteA.Size.Width, spriteA.Size.Height);
+            Rectangle rectangleB = new Rectangle((int)spriteB.Position.X, (int)spriteB.Position.Y, spriteB.Size.Width, spriteB.Size.Height);
+            Rectangle intersection = Rectangle.Intersect(rectangleA, rectangleB);
+            return intersection;
+
+         }
     }
 }
