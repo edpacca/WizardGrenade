@@ -9,9 +9,11 @@ namespace WizardGrenade
 {
     class Player : Sprite
     {
-        private readonly string _fileName = "wizard_solo";
+        private readonly string _fileName = "Wizard";
+        private int SpriteVersion;
 
         private SpriteFont _playerStatFont;
+        private SpriteFont _healthFont;
 
         private Crosshair crosshair = new Crosshair();
         public List<Grenade> _grenades = new List<Grenade>();
@@ -33,12 +35,15 @@ namespace WizardGrenade
         private float hitTimer;
         private float hitTimeOut = 500;
 
-        public int playerScore;
+        private bool alive = true;
+        private int health;
 
-        public Player(int startx, int starty)
+        public Player(int startx, int starty, int startHealth, int spriteVersion)
         {
             START_POSITION_X = startx;
             START_POSITION_Y = starty;
+            health = startHealth;
+            SpriteVersion = spriteVersion;
         }
 
         private enum ActiveState
@@ -70,11 +75,17 @@ namespace WizardGrenade
             crosshair.LoadContent(content);
 
             _playerStatFont = content.Load<SpriteFont>("StatFont");
+            _healthFont = content.Load<SpriteFont>("healthFont");
 
             foreach (var grenade in _grenades)
                 grenade.LoadContent(content);
 
-            LoadContent(content, _fileName);
+            if (SpriteVersion > 4)
+                SpriteVersion = 0;
+
+            string fileName = _fileName + SpriteVersion.ToString();
+
+            LoadContent(content, fileName);
         }
 
         public void Update(GameTime gameTime)
@@ -96,6 +107,8 @@ namespace WizardGrenade
 
             if (hit)
             {
+                health -= 25;
+
                 hitTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (hitTimer > hitTimeOut)
                 {
@@ -103,6 +116,9 @@ namespace WizardGrenade
                     hitTimer = 0;
                 }
             }
+
+            if (health <= 0)
+                alive = false;
 
             _previousKeyboardState = _currentKeyboardState;
         }
@@ -140,14 +156,11 @@ namespace WizardGrenade
 
         public void ChargeGrenadeThrow(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
         {
-
-
             if (currentKeyboardState.IsKeyDown(Keys.Space) && _grenadePower < 500)
             {
                 State = ActiveState.Charging;
                 _grenadePower += (float)gameTime.ElapsedGameTime.TotalSeconds * POWER_COEFFICIENT;
             }
-
 
             if (WizardGrenadeGame.KeysReleased(currentKeyboardState, previousKeyboardState, Keys.Space))
             {
@@ -191,7 +204,7 @@ namespace WizardGrenade
         {
             if (hit)
                 base.DrawHit(spriteBatch);
-            else
+            else if (alive)
                 base.Draw(spriteBatch);
 
             if (activePlayer)
@@ -203,16 +216,16 @@ namespace WizardGrenade
                     new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, WizardGrenadeGame.SCREEN_HEIGHT - 50), Color.Yellow);
 
                 spriteBatch.DrawString(_playerStatFont, "state: " + State,
-    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, WizardGrenadeGame.SCREEN_HEIGHT - 70), Color.Yellow);
+                    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, WizardGrenadeGame.SCREEN_HEIGHT - 70), Color.Yellow);
             }
-
+            else
+                spriteBatch.DrawString(_healthFont, health.ToString(),
+                    new Vector2(Position.X + 8, Position.Y - 15), Color.White);
 
             foreach (var grenade in _grenades)
             {
                 grenade.Draw(spriteBatch);
             }
-
-            
         }
 
     }

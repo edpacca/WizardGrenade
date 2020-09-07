@@ -120,3 +120,8 @@ C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\ob
 C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.csproj.CopyComplete
 C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.exe
 C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\obj\x86\Debug\WizardGrenade.pdb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\healthFont.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard0.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard1.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard2.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard3.xnb

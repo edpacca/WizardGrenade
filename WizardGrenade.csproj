@@ -51,6 +51,7 @@
     <Compile Include="RoundTimer.cs" />
     <Compile Include="Target.cs" />
     <Compile Include="Targets.cs" />
+    <Compile Include="TeamOfPlayers.cs" />
     <Compile Include="WizardGrenadeGame.cs" />
     <Compile Include="Grenade.cs" />
     <Compile Include="Player.cs" />
