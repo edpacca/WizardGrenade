@@ -24,6 +24,6 @@ namespace WizardGrenade
             Rectangle intersection = Rectangle.Intersect(rectangleA, rectangleB);
             return intersection;
 
-         }
+        }
     }
 }

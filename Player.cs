@@ -180,6 +180,7 @@ namespace WizardGrenade
                 {
                     dormantGrenade.ThrowPower = grenadePower;
                     dormantGrenade.ThrowAngle = crosshair.crosshairAngle;
+                    dormantGrenade.InitialVelocity = ProjectilePhysics.CalcProjectileVelocityComponents(crosshair.crosshairAngle, grenadePower);
                     dormantGrenade.InitialTime = gameTime.TotalGameTime;
                     dormantGrenade.InitialPosition = Position + Origin - dormantGrenade.Origin;
                     dormantGrenade.InMotion = true;
@@ -227,9 +228,9 @@ namespace WizardGrenade
                     spriteBatch.DrawString(_healthFont, "G" + _grenades.IndexOf(grenade) + ": " + grenade.ThrowAngle.ToString("0.0"),
                         new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, pos), Color.Yellow);
                     pos += 10;
-                    spriteBatch.DrawString(_healthFont, "G" + _grenades.IndexOf(grenade) + ": " + grenade.indidentAngle.X + ", " + grenade.indidentAngle.Y,
-                        new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, pos), Color.Yellow);
-                    pos += 10;
+                    //spriteBatch.DrawString(_healthFont, "G" + _grenades.IndexOf(grenade) + ": " + grenade.indidentAngle.X + ", " + grenade.indidentAngle.Y,
+                    //    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 160, pos), Color.Yellow);
+                    //pos += 10;
                 }
             }
             else if (!activePlayer && alive && !hit)

@@ -126,3 +126,12 @@ C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\
 C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard2.xnb
 C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard3.xnb
 C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\TowerSpritesheet.xnb
+C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\healthFont.xnb
+C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\TowerSpritesheet.xnb
+C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard0.xnb
+C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard1.xnb
+C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard2.xnb
+C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard3.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\block1.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\block2.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\block0.xnb

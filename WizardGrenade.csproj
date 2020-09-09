@@ -41,6 +41,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Block.cs" />
+    <Compile Include="BlockSetter.cs" />
     <Compile Include="Box.cs" />
     <Compile Include="Collision.cs" />
     <Compile Include="Crosshair.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="Targets.cs" />
     <Compile Include="TeamOfPlayers.cs" />
     <Compile Include="Tower.cs" />
+    <Compile Include="Utility.cs" />
     <Compile Include="WizardGrenadeGame.cs" />
     <Compile Include="Grenade.cs" />
     <Compile Include="Player.cs" />

@@ -31,8 +31,6 @@ namespace WizardGrenade
                 Size, Color.DarkRed, 0.0f, Vector2.Zero, 1, SpriteEffects.None, 0);
         }
 
-
-
         public Vector2 CalculateOrigin(Vector2 position) => new Vector2(position.X + Origin.X, position.Y + Origin.Y);
     }
 }

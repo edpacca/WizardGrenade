@@ -69,7 +69,18 @@ namespace WizardGrenade
             return (Math.Atan(incidentAngle.Y / incidentAngle.X));
         }
 
-        public static double ReflectionAngle(Vector2 vectorComponents)
+        public static Vector2 ReflectionOrientation(Sprite incidentObject, Sprite staticObject)
+        {
+            Rectangle collisionRectangle = Collision.CollisionRectangle(incidentObject, staticObject);
+            if (collisionRectangle.Width > collisionRectangle.Height)
+            {
+                return new Vector2(1, -1);
+            }
+            else
+                return new Vector2(-1, 1);
+        }
+
+            public static double ReflectionAngle(Vector2 vectorComponents)
         {
             return (Math.Asin(vectorComponents.X));
         }

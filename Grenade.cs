@@ -15,23 +15,25 @@ namespace WizardGrenade
         private TimeSpan _initialTime;
         private Vector2 _initialPosition;
         private Vector2 _initialVelocity;
-        private Vector2 _currentPosition;
+        private Vector2 _relativePosition;
 
         public bool hitSignal = false;
         private float hitTimer = 0;
         public bool InMotion { get; set; }
         public float ThrowPower { get; set; }
         public double ThrowAngle { get; set; }
+        public Vector2 InitialVelocity { get => _initialVelocity; set => _initialVelocity = value; }
         public TimeSpan InitialTime { get => _initialTime; set => _initialTime = value; }
         public Vector2 InitialPosition { get => _initialPosition; set => _initialPosition = value; }
 
-        public Vector2 indidentAngle;
+        //public Vector2 indidentAngle;
 
         public Grenade(float throwPower, double throwAngle, Vector2 initialPosition, TimeSpan throwTime)
         {
             InMotion = true;
             ThrowPower = throwPower;
             ThrowAngle = throwAngle;
+            InitialVelocity = ProjectilePhysics.CalcProjectileVelocityComponents(throwAngle, throwPower);
             InitialPosition = initialPosition - Origin;
             InitialTime = throwTime;
         }
@@ -41,26 +43,24 @@ namespace WizardGrenade
             if (hitSignal)
             {
                 hitTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                if (hitTimer > 300)
+                if (hitTimer > 100)
                 {
                     hitSignal = false;
                     hitTimer = 0;
                 }
-
             }
 
             if (InMotion)
             {
-                _initialVelocity = ProjectilePhysics.CalcProjectileVelocityComponents(ThrowAngle, ThrowPower);
-                _currentPosition = ProjectilePhysics.RelativeProjectilePosition(_initialVelocity, gameTime, InitialTime, MASS);
-                Position = InitialPosition + _currentPosition;
+
+                _relativePosition = ProjectilePhysics.RelativeProjectilePosition(InitialVelocity, gameTime, InitialTime, MASS);
+                Position = InitialPosition + _relativePosition;
 
                 if (Vector2.Distance(InitialPosition, Position) > MAX_DISTANCE)
                 {
                     InMotion = false;
                     hitSignal = false;
                 }
-
             }
         }
 
@@ -69,10 +69,13 @@ namespace WizardGrenade
             //ThrowPower = ThrowPower += 100;
             //if (ThrowPower < 0)
             //    ThrowPower = 0;
+            Vector2 reflection = ProjectilePhysics.ReflectionOrientation(this, collidesWith);
+            //TimeSpan backInTime = gameTime.TotalGameTime - new TimeSpan(0, 0, 0, 0, 10);
+            //indidentAngle = ProjectilePhysics.RelativeProjectilePosition(_initialVelocity, gameTime, backInTime, MASS);
+            //ThrowAngle = ProjectilePhysics.ReflectionAngle(indidentAngle, this, collidesWith);
+            InitialVelocity = new Vector2(InitialVelocity.X * reflection.X, InitialVelocity.Y * reflection.Y);
 
-            TimeSpan backInTime = gameTime.TotalGameTime - new TimeSpan(0, 0, 0, 0, 10);
-            indidentAngle = ProjectilePhysics.RelativeProjectilePosition(_initialVelocity, gameTime, backInTime, MASS);
-            ThrowAngle = ProjectilePhysics.ReflectionAngle(indidentAngle, this, collidesWith);
+
             InitialTime = gameTime.TotalGameTime;
             InitialPosition = Position;
         }
