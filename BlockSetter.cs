@@ -21,7 +21,7 @@ namespace WizardGrenade
 
         public void LoadContent(ContentManager contentManager)
         {
-            _spriteTexture = contentManager.Load<Texture2D>("block0");
+            _spriteTexture = contentManager.Load<Texture2D>("block1");
             _blockFont = contentManager.Load<SpriteFont>("StatFont");
         }
 
@@ -42,7 +42,7 @@ namespace WizardGrenade
                     PreviousBlock(Keys.U);
 
                     _blocks[activeBlock].SetBlocks(gameTime);
-                    _blocks[activeBlock].Colour = Color.Red;
+                    LockBlock(Keys.Y);
                 }
             }
 
@@ -57,6 +57,9 @@ namespace WizardGrenade
                     activeBlock = 0;
                 else
                     activeBlock++;
+
+                _blocks[activeBlock].Colour = Color.LimeGreen;
+                _blocks[activeBlock - 1].Colour = Color.White;
             }
         }
 
@@ -68,6 +71,20 @@ namespace WizardGrenade
                     activeBlock = _blocks.Count - 1;
                 else
                     activeBlock--;
+
+                _blocks[activeBlock].Colour = Color.LimeGreen;
+                _blocks[activeBlock + 1].Colour = Color.White;
+            }
+        }
+
+        public void LockBlock(Keys key)
+        {
+            if (Utility.KeysReleased(_currentKeyboardState, _previousKeyboardState, key))
+            {
+                if (_blocks[activeBlock].unlocked)
+                    _blocks[activeBlock].unlocked = false;
+                else
+                    _blocks[activeBlock].unlocked = true;
             }
         }
 

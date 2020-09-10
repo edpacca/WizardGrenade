@@ -44,9 +44,12 @@
     <Compile Include="Block.cs" />
     <Compile Include="BlockSetter.cs" />
     <Compile Include="Box.cs" />
+    <Compile Include="Circle.cs" />
     <Compile Include="Collision.cs" />
     <Compile Include="Crosshair.cs" />
+    <Compile Include="Fireball.cs" />
     <Compile Include="GameScreen.cs" />
+    <Compile Include="PhysicalSprite.cs" />
     <Compile Include="PlayerMarker.cs" />
     <Compile Include="ProjectilePhysics.cs" />
     <Compile Include="Animation.cs" />
@@ -56,6 +59,7 @@
     <Compile Include="TeamOfPlayers.cs" />
     <Compile Include="Tower.cs" />
     <Compile Include="Utility.cs" />
+    <Compile Include="Wizard.cs" />
     <Compile Include="WizardGrenadeGame.cs" />
     <Compile Include="Grenade.cs" />
     <Compile Include="Player.cs" />
