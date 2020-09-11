@@ -13,7 +13,7 @@ namespace WizardGrenade
         private readonly string _fileName = "fireball_single";
         private const float MASS = 30;
         private const float FRICTION = 0.2f;
-        private const int MAX_DISTANCE = 300;
+        private const int MAX_DISTANCE = 30;
         private Vector2 _initialPosition;
         public bool inMotion;
 

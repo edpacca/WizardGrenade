@@ -13,9 +13,14 @@ namespace WizardGrenade
             return new Vector2((float)Math.Sin(angle) * velocity, (float)Math.Cos(angle) * velocity);
         }
 
-        public static Vector2 CalculateVeclocity(float speed, float angle)
+        public static float CalcOffsetMagnitude(float theta, float radius)
         {
-            return new Vector2((float)Math.Sin(angle) * speed, (float)Math.Cos(angle) * speed);
+            return 2 * radius * (float)(Math.Abs(Math.Sin(theta / 2)));
+        }
+
+        public static Vector2 CalculateVeclocity(float magnitude, float angle)
+        {
+            return new Vector2((float)Math.Sin(angle) * magnitude, (float)Math.Cos(angle) * magnitude);
         }
 
         public static Vector2 RelativeProjectilePosition(Vector2 vectorComponents, GameTime gameTime, TimeSpan startTime, float mass)

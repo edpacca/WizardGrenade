@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace WizardGrenade
 {
@@ -138,14 +139,26 @@ namespace WizardGrenade
             base.Draw(spriteBatch);
             crosshair.Draw(spriteBatch);
 
-            spriteBatch.DrawString(_statFont, _fireballSpeed.ToString("0"),
+            DrawCollisionBox(spriteBatch);
+
+            spriteBatch.DrawString(_statFont, "power: " + _fireballSpeed.ToString("0"),
                 new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 100), Color.Yellow);
+            spriteBatch.DrawString(_statFont, "rotation: " + ((180 / Math.PI) * rotation).ToString("0.00"),
+                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 120), Color.Yellow);
+            spriteBatch.DrawString(_statFont, "sin(rot): " + Math.Sin(rotation).ToString("0.00"),
+                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 140), Color.Yellow);
+            spriteBatch.DrawString(_statFont, "cos(rot): " + Math.Cos(rotation).ToString("0.00"),
+                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 160), Color.Yellow);
+            spriteBatch.DrawString(_statFont, "X offset: " + rotationOffset.X.ToString("0.00"),
+                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 180), Color.Yellow);
+            spriteBatch.DrawString(_statFont, "Y offset: " + rotationOffset.Y.ToString("0.00"),
+                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 200), Color.Yellow);
 
             foreach (var fireball in _fireballs)
             {
                 fireball.Draw(spriteBatch);
+                fireball.DrawCollisionBox(spriteBatch);
             }
-
         }
     }
 }

@@ -44,7 +44,6 @@
     <Compile Include="Block.cs" />
     <Compile Include="BlockSetter.cs" />
     <Compile Include="Box.cs" />
-    <Compile Include="Circle.cs" />
     <Compile Include="Collision.cs" />
     <Compile Include="Crosshair.cs" />
     <Compile Include="Fireball.cs" />
