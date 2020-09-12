@@ -7,15 +7,15 @@ using System.Collections.Generic;
 
 namespace WizardGrenade
 {
-    class PhysicalSprite
+    class PhysicalSprite : Polygon
     {
         private Texture2D _spriteTexture;
-        private Texture2D _pixelTexture;
+        //private Texture2D _pixelTexture;
         public float layerDepth = 0.0f;
         public SpriteEffects spriteEffect = SpriteEffects.None;
-        
-        public Vector2 relativeOrigin { get; set; }
-        public Rectangle size { get; set; }
+
+        public Vector2 relativeOrigin;
+        public Rectangle size;
         public Vector2 position;
         public float rotation = 0.0f;
         public Vector2 velocity = new Vector2(0, 0);
@@ -27,7 +27,7 @@ namespace WizardGrenade
         private float _radius;
         private float _offsetRadius;
         private float _friction;
-        public List<Vector2> _collisionPoints = new List<Vector2>();
+        private List<Vector2> _collisionPoints = new List<Vector2>();
         private bool _canRotate;
 
         public PhysicalSprite(Vector2 initialPosition, float mass, float friction, bool canRotate)
@@ -41,13 +41,15 @@ namespace WizardGrenade
 
         public void LoadContent (ContentManager contentManager, string fileName)
         {
-            _pixelTexture = contentManager.Load<Texture2D>("pixel");
+            //_pixelTexture = contentManager.Load<Texture2D>("pixel");
             _spriteTexture = contentManager.Load<Texture2D>(fileName);
             size = new Rectangle(0, 0, _spriteTexture.Width, _spriteTexture.Height);
             relativeOrigin = new Vector2(_spriteTexture.Width / 2, _spriteTexture.Height / 2);
             _radius = Math.Max(_spriteTexture.Width, _spriteTexture.Height) / 2;
             _offsetRadius = (float)Math.Sqrt(2 * (_radius * _radius));
-            _collisionPoints = Collision.CalcCircleCollisionPoints(_radius, 2, Vector2.Zero);
+            _collisionPoints = Collision.CalcCircleCollisionPoints(_radius, 2);
+            polyPoints = _collisionPoints;
+            LoadPolyContent(contentManager);
         }
 
         public virtual void Update(GameTime gameTime)
@@ -63,6 +65,8 @@ namespace WizardGrenade
                 rotation -= (float)(2 * Math.PI);
             if (rotation < 0)
                 rotation += (float)(2 * Math.PI);
+
+            polyRotation = rotation;
 
             float potentialX = position.X + velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
             float potentialY = position.Y + velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -87,17 +91,20 @@ namespace WizardGrenade
         {
             spriteBatch.Draw(_spriteTexture, position + _rotationOffset,
                 size, Color.White, rotation, Vector2.Zero, 1, spriteEffect, layerDepth);
+
+            DrawCollisionPoints(spriteBatch, position);
         }
 
-        public void DrawCollisionPoints(SpriteBatch spriteBatch)
-        {
-            // Draw collision circle as 1 pixel dots
-            foreach (var point in _collisionPoints)
-                spriteBatch.Draw(_pixelTexture, point + position, new Rectangle(0, 0, 1, 1), Color.White);
 
-            // Draw position as 1 pixel dot
-            spriteBatch.Draw(_pixelTexture, position, new Rectangle(0, 0, 1, 1), Color.Magenta);
-        }
+        //public void DrawCollisionPoints(SpriteBatch spriteBatch)
+        //{
+        //    // Draw collision circle as 1 pixel dots
+        //    foreach (var point in _collisionPoints)
+        //        spriteBatch.Draw(_pixelTexture, point + position, new Rectangle(0, 0, 1, 1), Color.White);
+
+        //    // Draw position as 1 pixel dot
+        //    spriteBatch.Draw(_pixelTexture, position, new Rectangle(0, 0, 1, 1), Color.Magenta);
+        //}
 
     }
 }

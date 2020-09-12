@@ -53,9 +53,11 @@
     <Compile Include="Physics.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="RoundTimer.cs" />
+    <Compile Include="Polygon.cs" />
     <Compile Include="Target.cs" />
     <Compile Include="Targets.cs" />
     <Compile Include="TeamOfPlayers.cs" />
+    <Compile Include="TerrainSprite.cs" />
     <Compile Include="Tower.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Wizard.cs" />

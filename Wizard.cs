@@ -43,7 +43,6 @@ namespace WizardGrenade
             Right,
         }
 
-
         private ActiveState State;
         private Direction Facing;
 
@@ -107,7 +106,6 @@ namespace WizardGrenade
                 State = ActiveState.Idle;
 
             }
-
         }
 
         public void ChargeFireball(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState, GameTime gameTime)

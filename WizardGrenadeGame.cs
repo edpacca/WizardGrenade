@@ -56,7 +56,7 @@ namespace WizardGrenade
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             //gameScreen.LoadContent(Content);
             _wizard.LoadContent(Content);
-            _blockSetter.LoadContent(Content);
+            _blockSetter.LoadContent(Content, "block1");
         }
 
         protected override void UnloadContent()

@@ -51,7 +51,7 @@ namespace WizardGrenade
             }
 
             _playerStatFont = contentManager.Load<SpriteFont>("StatFont");
-            _blockSetter.LoadContent(contentManager);
+            _blockSetter.LoadContent(contentManager, "block1");
 
         }
 
@@ -94,11 +94,11 @@ namespace WizardGrenade
 
                             foreach (var block in _blockSetter._blocks)
                             {
-                                if (Collision.CollisionDetected(grenade, block))
-                                {
-                                    grenade.hitSignal = true;
-                                    grenade.CollisionResolution(gameTime, block);
-                                }
+                                //if (Collision.CollisionDetected(grenade, block))
+                                //{
+                                //    grenade.hitSignal = true;
+                                //    grenade.CollisionResolution(gameTime, block);
+                                //}
                             }
 
 

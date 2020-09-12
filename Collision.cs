@@ -31,19 +31,30 @@ namespace WizardGrenade
             return 2 * (float)Math.Asin(minLength / (2 * radius));
         }
 
-        public static List<Vector2> CalcCircleCollisionPoints (float radius, float minLength, Vector2 relativeOrigin)
+        public static List<Vector2> CalcCircleCollisionPoints (float radius, float minLength)
         {
             float minTheta = CalcMinTheta(radius, minLength);
             List<Vector2> relativeCollisionPoints = new List<Vector2>();
 
             for (float theta = 0; theta <= 2 * Math.PI; theta += minTheta)
             {
-                relativeCollisionPoints.Add(Physics.VectorComponents(radius, theta) + relativeOrigin);
+                relativeCollisionPoints.Add(Physics.VectorComponents(radius, theta));
             }
 
             return relativeCollisionPoints;
         }
 
+        public static List<Vector2> CalcRectangleCollisionPoints(float width, float height)
+        {
+            List<Vector2> relativeCollisionPoints = new List<Vector2>();
+
+            relativeCollisionPoints.Add(new Vector2(0 - width / 2, (0 - height / 2)));
+            relativeCollisionPoints.Add(new Vector2(0 + width / 2, (0 - height / 2)));
+            relativeCollisionPoints.Add(new Vector2(0 - width / 2, (0 + height / 2)));
+            relativeCollisionPoints.Add(new Vector2(0 + width / 2, (0 + height / 2)));
+
+            return relativeCollisionPoints;
+        }
 
 
 
