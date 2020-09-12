@@ -38,7 +38,7 @@ namespace WizardGrenade
 
             for (float theta = 0; theta <= 2 * Math.PI; theta += minTheta)
             {
-                relativeCollisionPoints.Add(ProjectilePhysics.CalculateVeclocity(radius, theta) + relativeOrigin);
+                relativeCollisionPoints.Add(Physics.VectorComponents(radius, theta) + relativeOrigin);
             }
 
             return relativeCollisionPoints;

@@ -4,33 +4,29 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace WizardGrenade
 {
     class Wizard : PhysicalSprite
     {
         private readonly string _fileName = "Wizard3";
-
         private SpriteFont _statFont;
-
         private Crosshair crosshair = new Crosshair();
         private List<Fireball> _fireballs = new List<Fireball>();
 
-        private float _fireballSpeed;
-
-        public const int PLAYER_SPEED = 100;
+        private const int PLAYER_SPEED = 100;
         private const int POWER_COEFFICIENT = 400;
+        private const float FRICTION = 0.5f;
+        private int _directionCoefficient = 1;
+
         private const float MASS = 0;
+        private float _fireballSpeed;
 
         private ContentManager _contentManager;
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
 
-        public Wizard(int startx, int starty) : base(new Vector2(startx, starty), MASS, true)
-        {
-
-        }
+        public Wizard(int startx, int starty) : base(new Vector2(startx, starty), MASS, FRICTION, false){}
 
         private enum ActiveState
         {
@@ -47,7 +43,6 @@ namespace WizardGrenade
             Right,
         }
 
-        private int directionCoeff = 1;
 
         private ActiveState State;
         private Direction Facing;
@@ -66,7 +61,7 @@ namespace WizardGrenade
             _currentKeyboardState = Keyboard.GetState();
 
             UpdateMovement(_currentKeyboardState, gameTime);
-            crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, Origin(), directionCoeff);
+            crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, position, _directionCoefficient);
 
             ChargeFireball(_currentKeyboardState, _previousKeyboardState, gameTime);
 
@@ -83,30 +78,36 @@ namespace WizardGrenade
             if (currentKeyboardState.IsKeyDown(Keys.Left))
             {
                 State = ActiveState.Walking;
+                //velocity.X -= PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 position.X -= PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 if (Facing != Direction.Left)
-                    crosshair.crosshairAngle = (ProjectilePhysics.FlipAngle(crosshair.crosshairAngle));
+                    crosshair.crosshairAngle = (Physics.FlipAngle(crosshair.crosshairAngle));
 
                 Facing = Direction.Left;
-                directionCoeff = -1;
-
+                spriteEffect = SpriteEffects.None;
+                _directionCoefficient = -1;
             }
 
             else if (currentKeyboardState.IsKeyDown(Keys.Right))
             {
                 State = ActiveState.Walking;
+                //velocity.X += PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 position.X += PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 if (Facing != Direction.Right)
-                    crosshair.crosshairAngle = (ProjectilePhysics.FlipAngle(crosshair.crosshairAngle));
+                    crosshair.crosshairAngle = (Physics.FlipAngle(crosshair.crosshairAngle));
 
                 Facing = Direction.Right;
-                directionCoeff = 1;
-
+                spriteEffect = SpriteEffects.FlipHorizontally;
+                _directionCoefficient = 1;
             }
             else
+            {
                 State = ActiveState.Idle;
+
+            }
+
         }
 
         public void ChargeFireball(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
@@ -125,11 +126,9 @@ namespace WizardGrenade
             }
         }
 
-
-        // getter and setters
         public void ThrowFireball(float _fireballSpeed, GameTime gameTime)
         {
-            Fireball fireball = new Fireball(Origin(), _fireballSpeed, (float)crosshair.crosshairAngle, gameTime.TotalGameTime);
+            Fireball fireball = new Fireball(position, _fireballSpeed, (float)crosshair.crosshairAngle, gameTime.TotalGameTime);
             fireball.LoadContent(_contentManager);
             _fireballs.Add(fireball);
         }
@@ -139,25 +138,16 @@ namespace WizardGrenade
             base.Draw(spriteBatch);
             crosshair.Draw(spriteBatch);
 
-            DrawCollisionBox(spriteBatch);
-
             spriteBatch.DrawString(_statFont, "power: " + _fireballSpeed.ToString("0"),
                 new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 100), Color.Yellow);
-            spriteBatch.DrawString(_statFont, "rotation: " + ((180 / Math.PI) * rotation).ToString("0.00"),
-                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 120), Color.Yellow);
-            spriteBatch.DrawString(_statFont, "sin(rot): " + Math.Sin(rotation).ToString("0.00"),
-                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 140), Color.Yellow);
-            spriteBatch.DrawString(_statFont, "cos(rot): " + Math.Cos(rotation).ToString("0.00"),
-                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 160), Color.Yellow);
-            spriteBatch.DrawString(_statFont, "X offset: " + rotationOffset.X.ToString("0.00"),
-                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 180), Color.Yellow);
-            spriteBatch.DrawString(_statFont, "Y offset: " + rotationOffset.Y.ToString("0.00"),
-                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 200), Color.Yellow);
+            spriteBatch.DrawString(_statFont, "State: " + State,
+                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 80), Color.Yellow);
+            spriteBatch.DrawString(_statFont, "Rotation: " + ((180 / Math.PI) * rotation).ToString("0.0"),
+                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 60), Color.Yellow);
 
             foreach (var fireball in _fireballs)
             {
                 fireball.Draw(spriteBatch);
-                fireball.DrawCollisionBox(spriteBatch);
             }
         }
     }

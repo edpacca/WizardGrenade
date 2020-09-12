@@ -131,7 +131,7 @@ namespace WizardGrenade
                 Position.X -= PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 if (Facing != Direction.Left)
-                    crosshair.crosshairAngle = (ProjectilePhysics.FlipAngle(crosshair.crosshairAngle));
+                    crosshair.crosshairAngle = (Physics.FlipAngle(crosshair.crosshairAngle));
 
                 Facing = Direction.Left;
                 directionCoeff = -1;
@@ -144,7 +144,7 @@ namespace WizardGrenade
                 Position.X += PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 if (Facing != Direction.Right)
-                    crosshair.crosshairAngle = (ProjectilePhysics.FlipAngle(crosshair.crosshairAngle));
+                    crosshair.crosshairAngle = (Physics.FlipAngle(crosshair.crosshairAngle));
 
                 Facing = Direction.Right;
                 directionCoeff = 1;
@@ -180,7 +180,7 @@ namespace WizardGrenade
                 {
                     dormantGrenade.ThrowPower = grenadePower;
                     dormantGrenade.ThrowAngle = crosshair.crosshairAngle;
-                    dormantGrenade.InitialVelocity = ProjectilePhysics.CalcProjectileVelocityComponents(crosshair.crosshairAngle, grenadePower);
+                    dormantGrenade.InitialVelocity = Physics.CalcProjectileVelocityComponents(crosshair.crosshairAngle, grenadePower);
                     dormantGrenade.InitialTime = gameTime.TotalGameTime;
                     dormantGrenade.InitialPosition = Position + Origin - dormantGrenade.Origin;
                     dormantGrenade.InMotion = true;

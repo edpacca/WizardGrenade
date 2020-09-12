@@ -10,7 +10,7 @@ namespace WizardGrenade
         private SpriteBatch _spriteBatch;
 
         private Wizard _wizard;
-
+        private BlockSetter _blockSetter;
         private GameScreen gameScreen;
 
         private KeyboardState _currentKeyboardState;
@@ -18,7 +18,7 @@ namespace WizardGrenade
 
         private const int ScreenResolutionWidth = 1920;
         private const int ScreenResolutionHeight = 1080;
-        private const float TargetScreenWidth = 600;
+        private const float TargetScreenWidth = 1300;
         private const float TargetScreenHeight = TargetScreenWidth * 0.5625f;
         public const int SCREEN_WIDTH = (int)TargetScreenWidth;
         public const int SCREEN_HEIGHT = (int)TargetScreenHeight;
@@ -47,7 +47,7 @@ namespace WizardGrenade
             Scale = Matrix.CreateScale(new Vector3(scaleX, scaleY, 1));
 
             _wizard = new Wizard(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-
+            _blockSetter = new BlockSetter();
             base.Initialize();
         }
 
@@ -56,7 +56,7 @@ namespace WizardGrenade
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             //gameScreen.LoadContent(Content);
             _wizard.LoadContent(Content);
-
+            _blockSetter.LoadContent(Content);
         }
 
         protected override void UnloadContent()
@@ -73,7 +73,7 @@ namespace WizardGrenade
 
             //gameScreen.Update(gameTime);
             _wizard.Update(gameTime);
-
+            _blockSetter.Update(gameTime);
             _previousKeyboardState = _currentKeyboardState;
 
             base.Update(gameTime);
@@ -94,7 +94,7 @@ namespace WizardGrenade
             _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, Scale);
             _wizard.Draw(_spriteBatch);
             //gameScreen.Draw(_spriteBatch);
-
+            _blockSetter.DrawBlocks(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);

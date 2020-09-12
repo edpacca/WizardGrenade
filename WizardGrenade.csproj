@@ -50,7 +50,7 @@
     <Compile Include="GameScreen.cs" />
     <Compile Include="PhysicalSprite.cs" />
     <Compile Include="PlayerMarker.cs" />
-    <Compile Include="ProjectilePhysics.cs" />
+    <Compile Include="Physics.cs" />
     <Compile Include="Animation.cs" />
     <Compile Include="RoundTimer.cs" />
     <Compile Include="Target.cs" />

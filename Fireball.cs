@@ -12,14 +12,14 @@ namespace WizardGrenade
     {
         private readonly string _fileName = "fireball_single";
         private const float MASS = 30;
-        private const float FRICTION = 0.2f;
-        private const int MAX_DISTANCE = 30;
+        private const float FRICTION = 0.999f;
+        private const int MAX_DISTANCE = 3000;
         private Vector2 _initialPosition;
         public bool inMotion;
 
-        public Fireball(Vector2 initialPosition, float throwPower, float throwAngle, TimeSpan throwTime) : base(initialPosition, MASS, false)
+        public Fireball(Vector2 initialPosition, float throwPower, float throwAngle, TimeSpan throwTime) : base(initialPosition, MASS, FRICTION, true)
         {
-            velocity = ProjectilePhysics.CalculateVeclocity(throwPower, throwAngle);
+            velocity = Physics.VectorComponents(throwPower, throwAngle);
             _initialPosition = initialPosition;
             inMotion = true;
         }

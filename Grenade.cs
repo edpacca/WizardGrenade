@@ -33,7 +33,7 @@ namespace WizardGrenade
             InMotion = true;
             ThrowPower = throwPower;
             ThrowAngle = throwAngle;
-            InitialVelocity = ProjectilePhysics.CalcProjectileVelocityComponents(throwAngle, throwPower);
+            InitialVelocity = Physics.CalcProjectileVelocityComponents(throwAngle, throwPower);
             InitialPosition = initialPosition - Origin;
             InitialTime = throwTime;
         }
@@ -53,7 +53,7 @@ namespace WizardGrenade
             if (InMotion)
             {
 
-                _relativePosition = ProjectilePhysics.RelativeProjectilePosition(InitialVelocity, gameTime, InitialTime, MASS);
+                _relativePosition = Physics.RelativeProjectilePosition(InitialVelocity, gameTime, InitialTime, MASS);
                 Position = InitialPosition + _relativePosition;
 
                 if (Vector2.Distance(InitialPosition, Position) > MAX_DISTANCE)
@@ -69,7 +69,7 @@ namespace WizardGrenade
             //ThrowPower = ThrowPower += 100;
             //if (ThrowPower < 0)
             //    ThrowPower = 0;
-            Vector2 reflection = ProjectilePhysics.ReflectionOrientation(this, collidesWith);
+            Vector2 reflection = Physics.ReflectionOrientation(this, collidesWith);
             //TimeSpan backInTime = gameTime.TotalGameTime - new TimeSpan(0, 0, 0, 0, 10);
             //indidentAngle = ProjectilePhysics.RelativeProjectilePosition(_initialVelocity, gameTime, backInTime, MASS);
             //ThrowAngle = ProjectilePhysics.ReflectionAngle(indidentAngle, this, collidesWith);
