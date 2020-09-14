@@ -18,7 +18,7 @@ namespace WizardGrenade
 
         private const int ScreenResolutionWidth = 1920;
         private const int ScreenResolutionHeight = 1080;
-        private const float TargetScreenWidth = 1300;
+        private const float TargetScreenWidth = 400;
         private const float TargetScreenHeight = TargetScreenWidth * 0.5625f;
         public const int SCREEN_WIDTH = (int)TargetScreenWidth;
         public const int SCREEN_HEIGHT = (int)TargetScreenHeight;

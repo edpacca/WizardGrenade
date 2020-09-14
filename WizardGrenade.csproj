@@ -41,32 +41,32 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Block.cs" />
-    <Compile Include="BlockSetter.cs" />
-    <Compile Include="Box.cs" />
-    <Compile Include="Collision.cs" />
-    <Compile Include="Crosshair.cs" />
-    <Compile Include="Fireball.cs" />
-    <Compile Include="GameScreen.cs" />
-    <Compile Include="PhysicalSprite.cs" />
-    <Compile Include="PlayerMarker.cs" />
-    <Compile Include="Physics.cs" />
-    <Compile Include="Animation.cs" />
-    <Compile Include="RoundTimer.cs" />
-    <Compile Include="Polygon.cs" />
-    <Compile Include="Target.cs" />
-    <Compile Include="Targets.cs" />
-    <Compile Include="TeamOfPlayers.cs" />
-    <Compile Include="TerrainSprite.cs" />
-    <Compile Include="Tower.cs" />
-    <Compile Include="Utility.cs" />
-    <Compile Include="Wizard.cs" />
+    <Compile Include="GameObjects\Block.cs" />
+    <Compile Include="GameImplementation\BlockSetter.cs" />
+    <Compile Include="GameUtilities\Collision.cs" />
+    <Compile Include="GameObjects\Crosshair.cs" />
+    <Compile Include="GameObjects\Fireball.cs" />
+    <Compile Include="GameImplementation\GameScreen.cs" />
+    <Compile Include="GameUtilities\Line2D.cs" />
+    <Compile Include="GameGenerics\PhysicalSprite.cs" />
+    <Compile Include="GameObjects\PlayerMarker.cs" />
+    <Compile Include="GameUtilities\Physics.cs" />
+    <Compile Include="GameGenerics\Animation.cs" />
+    <Compile Include="GameImplementation\RoundTimer.cs" />
+    <Compile Include="GameGenerics\Polygon.cs" />
+    <Compile Include="GameObjects\Target.cs" />
+    <Compile Include="GameImplementation\Targets.cs" />
+    <Compile Include="GameImplementation\TeamOfPlayers.cs" />
+    <Compile Include="GameGenerics\TerrainSprite.cs" />
+    <Compile Include="GameObjects\Tower.cs" />
+    <Compile Include="GameUtilities\Utility.cs" />
+    <Compile Include="GameObjects\Wizard.cs" />
     <Compile Include="WizardGrenadeGame.cs" />
-    <Compile Include="Grenade.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="GameObjects\Grenade.cs" />
+    <Compile Include="GameObjects\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sprite.cs" />
+    <Compile Include="GameGenerics\Sprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

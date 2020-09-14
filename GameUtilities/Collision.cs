@@ -4,8 +4,23 @@ using System.Collections.Generic;
 
 namespace WizardGrenade
 {
+
+
+
     class Collision
     {
+        public static bool PolyCollisionDectected(Polygon polyA, Polygon polyB)
+        {
+            foreach (var collisionPoint in polyA.transformedPolyPoints)
+            {
+
+            }
+            return true;
+        }
+
+
+
+
         public static bool CollisionDetected(Sprite spriteA, Sprite spriteB)
         {
             Rectangle spriteARectangle = new Rectangle((int)spriteA.Position.X, (int)spriteA.Position.Y, spriteA.Size.Width, spriteA.Size.Height);

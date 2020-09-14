@@ -18,7 +18,7 @@ namespace WizardGrenade
         private Vector2 _rotationOffset = Vector2.Zero;
         private float _offsetLength;
 
-        public Color Colour = Color.LimeGreen;
+        public Color Colour = Color.White;
         public SpriteEffects SpriteEffect = SpriteEffects.None;
         public bool unlocked = true;
 
@@ -53,6 +53,8 @@ namespace WizardGrenade
 
                 _rotationOffset.X = _offsetLength * (float)Math.Sin(rotation) - (_spriteTexture.Width / 2 * (float)Math.Cos(rotation));
                 _rotationOffset.Y = -_offsetLength * (float)Math.Cos(rotation) - (_spriteTexture.Width / 2 * (float)Math.Sin(rotation));
+                
+                UpdatePolyPoints(position, rotation);
 
                 _previousKBState = _currentKBState;
             }

@@ -14,7 +14,9 @@ namespace WizardGrenade
 
         KeyboardState _currentKeyboardState;
         KeyboardState _previousKeyboardState;
-        
+
+        private Color _activeColour = Color.Crimson;
+        private Color _fontColour = Color.Coral;
         SpriteFont _blockFont;
         private Texture2D _spriteTexture;
         private string _blockTexture;
@@ -25,7 +27,7 @@ namespace WizardGrenade
             _contentManager = contentManager;
             _blockTexture = blockTexture;
             //_spriteTexture = contentManager.Load<Texture2D>("block1");
-            _blockFont = contentManager.Load<SpriteFont>("StatFont");
+            _blockFont = contentManager.Load<SpriteFont>("healthFont");
         }
 
 
@@ -34,6 +36,14 @@ namespace WizardGrenade
             _currentKeyboardState = Keyboard.GetState();
 
             SetBlocks(Keys.P);
+
+            foreach (var block in _blocks)
+            {
+                if (block.unlocked)
+                    block.Colour = _activeColour;
+                else
+                    block.Colour = Color.White;
+            }
 
             if (settingBlocks)
             {
@@ -60,9 +70,6 @@ namespace WizardGrenade
                     activeBlock = 0;
                 else
                     activeBlock++;
-
-                _blocks[activeBlock].Colour = Color.LimeGreen;
-                _blocks[activeBlock - 1].Colour = Color.White;
             }
         }
 
@@ -74,9 +81,6 @@ namespace WizardGrenade
                     activeBlock = _blocks.Count - 1;
                 else
                     activeBlock--;
-
-                _blocks[activeBlock].Colour = Color.LimeGreen;
-                _blocks[activeBlock + 1].Colour = Color.White;
             }
         }
 
@@ -85,9 +89,15 @@ namespace WizardGrenade
             if (Utility.KeysReleased(_currentKeyboardState, _previousKeyboardState, key))
             {
                 if (_blocks[activeBlock].unlocked)
+                {
                     _blocks[activeBlock].unlocked = false;
+                }
+
                 else
+                {
                     _blocks[activeBlock].unlocked = true;
+                }
+
             }
         }
 
@@ -102,6 +112,10 @@ namespace WizardGrenade
             _blocks.Add(new TerrainSprite());
             activeBlock = _blocks.Count - 1;
             _blocks[activeBlock].LoadContent(_contentManager, _blockTexture);
+
+            foreach (var block in _blocks)
+                if (block != _blocks[activeBlock])
+                    block.unlocked = false;
         }
 
         public void SetBlocks(Keys key)
@@ -124,18 +138,19 @@ namespace WizardGrenade
 
             if (settingBlocks)
             {
-                spriteBatch.DrawString(_blockFont, "SET BLOCKS", new Vector2(WizardGrenadeGame.SCREEN_WIDTH / 2 - 70, 20), Color.LimeGreen);
+                spriteBatch.DrawString(_blockFont, "SET BLOCKS", new Vector2(WizardGrenadeGame.SCREEN_WIDTH / 2 - 70, 20), _fontColour);
 
                 var pos = 10;
-                var diff = 20;
-                spriteBatch.DrawString(_blockFont, "Rotate +: T", new Vector2(10, pos), Color.LimeGreen); pos += diff;
-                spriteBatch.DrawString(_blockFont, "Rotate -: R", new Vector2(10, pos), Color.LimeGreen); pos += diff;
-                spriteBatch.DrawString(_blockFont, "Size +: E", new Vector2(10, pos), Color.LimeGreen); pos += diff;
-                spriteBatch.DrawString(_blockFont, "Size -: W", new Vector2(10, pos), Color.LimeGreen); pos += diff;
-                spriteBatch.DrawString(_blockFont, "New block: O", new Vector2(10, pos), Color.LimeGreen); pos += diff;
-                spriteBatch.DrawString(_blockFont, "Next block: I", new Vector2(10, pos), Color.LimeGreen); pos += diff;
-                spriteBatch.DrawString(_blockFont, "Previous block: U", new Vector2(10, pos), Color.LimeGreen); pos += diff;
-                spriteBatch.DrawString(_blockFont, "Lock blocks: P", new Vector2(10, pos), Color.LimeGreen); pos += diff;
+                var diff = 10;
+                spriteBatch.DrawString(_blockFont, "Rotate +: T", new Vector2(10, pos), _fontColour); pos += diff;
+                spriteBatch.DrawString(_blockFont, "Rotate -: R", new Vector2(10, pos), _fontColour); pos += diff;
+                spriteBatch.DrawString(_blockFont, "Size +: E", new Vector2(10, pos), _fontColour); pos += diff;
+                spriteBatch.DrawString(_blockFont, "Size -: W", new Vector2(10, pos), _fontColour); pos += diff;
+                spriteBatch.DrawString(_blockFont, "New block: O", new Vector2(10, pos), _fontColour); pos += diff;
+                spriteBatch.DrawString(_blockFont, "Lock block: Y", new Vector2(10, pos), _fontColour); pos += diff;
+                spriteBatch.DrawString(_blockFont, "Next block: I", new Vector2(10, pos), _fontColour); pos += diff;
+                spriteBatch.DrawString(_blockFont, "Previous block: U", new Vector2(10, pos), _fontColour); pos += diff;
+                spriteBatch.DrawString(_blockFont, "Set/Unset blocks: P", new Vector2(10, pos), _fontColour); pos += diff;
             }
 
         }
