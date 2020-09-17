@@ -4,17 +4,17 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using WizardGrenade.GameUtilities;
 
 namespace WizardGrenade
 {
-    class TerrainSprite : Polygon
+    class BlockSprite : Polygon
     {
         private Texture2D _spriteTexture;
         public Rectangle size;
         public Vector2 relativeOrigin;
         public Vector2 position;
         public float rotation = 0.0f;
-        private List<Vector2> _collisionPoints = new List<Vector2>();
         private Vector2 _rotationOffset = Vector2.Zero;
         private float _offsetLength;
 
@@ -32,7 +32,7 @@ namespace WizardGrenade
             size = new Rectangle(0, 0, _spriteTexture.Width, _spriteTexture.Height);
             relativeOrigin = new Vector2(_spriteTexture.Width / 2, _spriteTexture.Height / 2);
             _offsetLength = (float)Math.Sqrt(Math.Pow((_spriteTexture.Width / 2), 2) + Math.Pow((_spriteTexture.Height / 2), 2));
-            polyPoints = Collision.CalcRectangleCollisionPoints(_spriteTexture.Width, _spriteTexture.Height);
+            polyPoints = MathsExt.CalcRectangleCollisionPoints(_spriteTexture.Width, _spriteTexture.Height);
             LoadPolyContent(contentManager);
         }
 
@@ -51,9 +51,9 @@ namespace WizardGrenade
                 if (Utility.KeysReleased(_currentKBState, _previousKBState, Keys.T))
                     rotation += (float)Math.PI / 4;
 
-                _rotationOffset.X = _offsetLength * (float)Math.Sin(rotation) - (_spriteTexture.Width / 2 * (float)Math.Cos(rotation));
-                _rotationOffset.Y = -_offsetLength * (float)Math.Cos(rotation) - (_spriteTexture.Width / 2 * (float)Math.Sin(rotation));
-                
+                _rotationOffset.X = -_spriteTexture.Width / 2 * (float)Math.Cos(rotation) + (_spriteTexture.Height / 2 * (float)Math.Sin(rotation));
+                _rotationOffset.Y = -_spriteTexture.Height / 2 * (float)Math.Cos(rotation) - (_spriteTexture.Width / 2 * (float)Math.Sin(rotation));
+
                 UpdatePolyPoints(position, rotation);
 
                 _previousKBState = _currentKBState;

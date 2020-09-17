@@ -13,11 +13,13 @@ namespace WizardGrenade
         private readonly string _fileName = "fireball_single";
         private const float MASS = 30;
         private const float FRICTION = 0.999f;
-        private const int MAX_DISTANCE = 3000;
-        private Vector2 _initialPosition;
+        private const int MAX_DISTANCE = 500;
+        private const float _minCollisionPolyPointDistance = 3f;
+        public Vector2 _initialPosition;
         public bool inMotion;
 
-        public Fireball(Vector2 initialPosition, float throwPower, float throwAngle, TimeSpan throwTime) : base(initialPosition, MASS, FRICTION, true)
+        public Fireball(Vector2 initialPosition, float throwPower, float throwAngle) : 
+            base(initialPosition, MASS, FRICTION, true, _minCollisionPolyPointDistance)
         {
             velocity = Physics.VectorComponents(throwPower, throwAngle);
             _initialPosition = initialPosition;
@@ -31,6 +33,20 @@ namespace WizardGrenade
 
             if (inMotion)
                 base.Update(gameTime);
+        }
+
+        public void ThrowAgain(float power, float angle, Vector2 initialPosition)
+        {
+            inMotion = true;
+            position = initialPosition;
+            _initialPosition = initialPosition;
+            velocity = Physics.VectorComponents(power, angle);
+        }
+
+        public override void OnCollision()
+        {
+            velocity.X *= -1;
+            velocity.Y *= -1;
         }
 
         public void LoadContent (ContentManager contentManager)

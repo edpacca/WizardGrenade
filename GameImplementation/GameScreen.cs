@@ -11,16 +11,9 @@ namespace WizardGrenade
 {
     class GameScreen
     {
-        private int numberOfTeams = 1;
-        private int playersPerTeam = 1;
-        private int startHealth = 100;
-        private List<TeamOfPlayers> Teams;
-        private int activeTeamRoster;
-
-        private SpriteFont _playerStatFont;
+        private Wizard _wizard;
         private BlockSetter _blockSetter;
-
-        private int startY = 500;
+        private Sprite _mouse;
 
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
@@ -29,30 +22,18 @@ namespace WizardGrenade
 
         public void Initialize()
         {
-            Teams = new List<TeamOfPlayers>();
-
-            for (int i = 0; i < numberOfTeams; i++)
-            {
-                Teams.Add(new TeamOfPlayers(playersPerTeam, startHealth, startY, i));
-                startY += 100;
-            }
-            Teams[0].activeTeam = true;
-
+            _wizard = new Wizard(WizardGrenadeGame.SCREEN_WIDTH / 2, WizardGrenadeGame.SCREEN_HEIGHT / 2);
             _blockSetter = new BlockSetter();
-    }
+            _mouse = new Sprite();
+        }
 
         public void LoadContent (ContentManager contentManager)
         {
             _currentKeyboardState = Keyboard.GetState();
 
-            foreach (var team in Teams)
-            {
-                team.LoadContent(contentManager);
-            }
-
-            _playerStatFont = contentManager.Load<SpriteFont>("StatFont");
-            _blockSetter.LoadContent(contentManager, "block1");
-
+            _wizard.LoadContent(contentManager);
+            _blockSetter.LoadContent(contentManager, "Block1");
+            _mouse.LoadContent(contentManager, "mouse");
         }
 
         public void UnloadContent()
@@ -65,70 +46,29 @@ namespace WizardGrenade
             _currentKeyboardState = Keyboard.GetState();
             _currentMouseState = Mouse.GetState();
 
+            _mouse.Position.X = _currentMouseState.X - 2.5f;
+            _mouse.Position.Y = _currentMouseState.Y - 2.5f;
+
+            _wizard.Update(gameTime, _blockSetter._blocks);
             _blockSetter.Update(gameTime);
-
-            foreach (var team in Teams)
-            {
-                team.UpdateTeams(gameTime);
-            }
-
-            if (WizardGrenadeGame.KeysReleased(_currentKeyboardState, _previousKeyboardState, Keys.Q))
-            {
-                Teams[activeTeamRoster].activeTeam = false;
-
-                activeTeamRoster += 1;
-                if (activeTeamRoster >= Teams.Count)
-                    activeTeamRoster = 0;
-
-                Teams[activeTeamRoster].activeTeam = true;
-                Teams[activeTeamRoster].justActivated = true;
-            }
-
-            foreach (Player player in Teams[activeTeamRoster].team)
-            {
-                if (player.activePlayer)
-                {
-                    foreach (var grenade in player._grenades)
-                    {
-                        if (grenade.InMotion && grenade.hitSignal == false)
-
-                            foreach (var block in _blockSetter._blocks)
-                            {
-                                //if (Collision.CollisionDetected(grenade, block))
-                                //{
-                                //    grenade.hitSignal = true;
-                                //    grenade.CollisionResolution(gameTime, block);
-                                //}
-                            }
-
-
-                            //foreach (var playerteam in Teams)
-                            //{
-                            //    foreach (Player teamPlayer in playerteam.team)
-                            //    {
-                            //        if (Collision.CollisionDetected(grenade, teamPlayer) && !(teamPlayer.activePlayer && playerteam.activeTeam) && teamPlayer.alive)
-                            //        {
-                            //            teamPlayer.hit = true;
-                            //            grenade.hitSignal = true;
-                            //            grenade.CollisionResolution(gameTime, teamPlayer);
-                            //        }
-                            //    }
-                            //}
-                    }
-                }
-            }
 
             _previousKeyboardState = _currentKeyboardState;
         }
 
+        public void CheckForCollision(Polygon projectile, List<BlockSprite> polygons)
+        {
+            foreach (var polygon in polygons)
+            {
+                if (Collision.PolyCollisionDectected(projectile, polygon))
+                    projectile.OnCollision();
+            }
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
+            _wizard.Draw(spriteBatch);
             _blockSetter.DrawBlocks(spriteBatch);
-
-            foreach (var team in Teams)
-            {
-                team.DrawTeam(spriteBatch);
-            }
+            _mouse.Draw(spriteBatch);
         }
     }
 }

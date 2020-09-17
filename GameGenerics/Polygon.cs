@@ -2,9 +2,6 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Net.NetworkInformation;
-using System.Runtime.InteropServices;
 
 namespace WizardGrenade
 {
@@ -14,7 +11,6 @@ namespace WizardGrenade
         public List<Vector2> transformedPolyPoints = new List<Vector2>();
         private Texture2D _pixelTexture;
         private Rectangle pixelRectangle = new Rectangle(0, 0, 1, 1);
-        public float polyRotation;
 
         public void LoadPolyContent(ContentManager contentManager)
         {
@@ -40,6 +36,11 @@ namespace WizardGrenade
 
             // Draw position as 1 pixel dot
             spriteBatch.Draw(_pixelTexture, position, pixelRectangle, Color.Magenta);
+        }
+
+        public virtual void OnCollision()
+        {
+
         }
     }
 }

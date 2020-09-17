@@ -104,6 +104,18 @@
 /processorParam:TextureFormat=Compressed
 /build:healthFont.spritefont
 
+#begin mouse.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:mouse.png
+
 #begin pixel.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -53,7 +53,7 @@ namespace WizardGrenade
                 player.Update(gameTime);
             }
 
-            if (activeTeam && WizardGrenadeGame.KeysReleased(_currentKeyboardState, _previousKeyboardState, Keys.Tab))
+            if (activeTeam && Utility.KeysReleased(_currentKeyboardState, _previousKeyboardState, Keys.Tab))
             {
                 team[activePlayerRoster].activePlayer = false;
 

@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
+using WizardGrenade.GameUtilities;
 
 namespace WizardGrenade
 {
@@ -20,31 +19,38 @@ namespace WizardGrenade
         public Vector2 velocity = new Vector2(0, 0);
         public Vector2 acceleration = new Vector2(0, 0);
         public bool isStable;
+        public Vector2 direction = new Vector2(0, 0);
+        private float directionNorm = 1;
 
         private Vector2 _rotationOffset = Vector2.Zero;
+        private Vector2 potential = Vector2.Zero;
         private float _mass;
         private float _radius;
         private float _offsetRadius;
         private float _friction;
         private bool _canRotate;
+        private float _minCollisionPolyPointDistance;
 
-        public PhysicalSprite(Vector2 initialPosition, float mass, float friction, bool canRotate)
+        public PhysicalSprite(Vector2 initialPosition, float mass, float friction, bool canRotate, float minCollisionPolyPointDistance)
         {
             position.X = initialPosition.X;
             position.Y = initialPosition.Y;
             _mass = mass;
             _canRotate = canRotate;
             _friction = friction;
+            _minCollisionPolyPointDistance = minCollisionPolyPointDistance;
         }
 
-        public void LoadContent (ContentManager contentManager, string fileName)
+        public void LoadContent(ContentManager contentManager, string fileName)
         {
             _spriteTexture = contentManager.Load<Texture2D>(fileName);
             size = new Rectangle(0, 0, _spriteTexture.Width, _spriteTexture.Height);
             relativeOrigin = new Vector2(_spriteTexture.Width / 2, _spriteTexture.Height / 2);
             _radius = Math.Max(_spriteTexture.Width, _spriteTexture.Height) / 2;
             _offsetRadius = (float)Math.Sqrt(2 * (_radius * _radius));
-            polyPoints = Collision.CalcCircleCollisionPoints(_radius, 2);
+            polyPoints = _minCollisionPolyPointDistance == 0 ?
+                MathsExt.CalcRectangleCollisionPoints(_spriteTexture.Width, _spriteTexture.Height) :
+                MathsExt.CalcCircleCollisionPoints(_radius, _minCollisionPolyPointDistance);
             LoadPolyContent(contentManager);
         }
 
@@ -60,28 +66,58 @@ namespace WizardGrenade
             velocity.X += acceleration.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
             velocity.Y += acceleration.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            directionNorm = _radius / MathsExt.VectorMagnitude(velocity);
+            direction = position + Vector2.Multiply(velocity, directionNorm);
+
+            UpdateRotation();
+
+            UpdatePotential(gameTime);
+
+            UpdatePolyPoints(potential, rotation);
+
+            position = potential;
+
+            ResetAcceleration();
+            UpdateRotationOffset();
+            UpdateXFriction();
+        }
+
+        public void CheckCollision()
+        {
+
+        }
+
+
+        private void UpdatePotential(GameTime gameTime)
+        {
+            potential.X = position.X + velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            potential.Y = position.Y + velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+
+        private void UpdateRotation()
+        {
             if (_canRotate)
                 rotation = (float)(Math.Atan2(velocity.Y, velocity.X));
             if (rotation > 2 * Math.PI)
                 rotation -= (float)(2 * Math.PI);
             if (rotation < 0)
                 rotation += (float)(2 * Math.PI);
+        }
 
-            float potentialX = position.X + velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            float potentialY = position.Y + velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            acceleration.X = 0;
-            acceleration.Y = 0;
-            isStable = false;
-
-            position.X = potentialX;
-            position.Y = potentialY;
-
+        private void UpdateRotationOffset()
+        {
             _rotationOffset.X = _offsetRadius * (float)Math.Sin(rotation - (Math.PI / 4));
             _rotationOffset.Y = -_offsetRadius * (float)Math.Cos(rotation - (Math.PI / 4));
+        }
 
-            UpdatePolyPoints(position, rotation);
+        private void ResetAcceleration()
+        {
+            acceleration = Vector2.Zero;
+            isStable = false;
+        }
 
+        private void UpdateXFriction()
+        {
             velocity.X *= _friction;
 
             if (velocity.X > 0 && velocity.X < 0.01f || velocity.X < 0 && velocity.X > -0.01f)

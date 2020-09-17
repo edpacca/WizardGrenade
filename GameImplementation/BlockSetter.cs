@@ -10,7 +10,7 @@ namespace WizardGrenade
     {
         private int activeBlock = 0;
         private bool settingBlocks;
-        public List<TerrainSprite> _blocks = new List<TerrainSprite>();
+        public List<BlockSprite> _blocks = new List<BlockSprite>();
 
         KeyboardState _currentKeyboardState;
         KeyboardState _previousKeyboardState;
@@ -18,7 +18,6 @@ namespace WizardGrenade
         private Color _activeColour = Color.Crimson;
         private Color _fontColour = Color.Coral;
         SpriteFont _blockFont;
-        private Texture2D _spriteTexture;
         private string _blockTexture;
         private ContentManager _contentManager;
 
@@ -26,7 +25,6 @@ namespace WizardGrenade
         {
             _contentManager = contentManager;
             _blockTexture = blockTexture;
-            //_spriteTexture = contentManager.Load<Texture2D>("block1");
             _blockFont = contentManager.Load<SpriteFont>("healthFont");
         }
 
@@ -109,7 +107,7 @@ namespace WizardGrenade
 
         public void AddNewBlock()
         {
-            _blocks.Add(new TerrainSprite());
+            _blocks.Add(new BlockSprite());
             activeBlock = _blocks.Count - 1;
             _blocks[activeBlock].LoadContent(_contentManager, _blockTexture);
 

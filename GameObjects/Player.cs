@@ -162,7 +162,7 @@ namespace WizardGrenade
                 _grenadePower += (float)gameTime.ElapsedGameTime.TotalSeconds * POWER_COEFFICIENT;
             }
 
-            if (WizardGrenadeGame.KeysReleased(currentKeyboardState, previousKeyboardState, Keys.Space))
+            if (Utility.KeysReleased(currentKeyboardState, previousKeyboardState, Keys.Space))
             {
                 ThrowGrenade(_grenadePower, gameTime);
                 _grenadePower = 0;

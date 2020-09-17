@@ -13,9 +13,9 @@ namespace WizardGrenade
             return new Vector2((float)Math.Sin(angle) * magnitude, (float)Math.Cos(angle) * magnitude);
         }
 
-        public static double FlipAngle(double initialAngle)
+        public static float FlipAngle(float initialAngle)
         {
-            double flippedAngle = Math.PI + (Math.PI - initialAngle);
+            float flippedAngle = (float)(Math.PI + (Math.PI - initialAngle));
             return flippedAngle;
         }
 

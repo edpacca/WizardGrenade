@@ -10,55 +10,60 @@ namespace WizardGrenade
     {
         private readonly string _fileName = "crosshair";
         private const int AIM_SPEED = 5;
-        private const int CROSSHAIR_RADIUS = 48;
+        private const int CROSSHAIR_RADIUS = 50;
         private const int START_ANGLE = 180;
-        private const double RAD = Math.PI / 180;
-
-        // fix
-        public double crosshairAngle = START_ANGLE * RAD;
+        private const float RAD = (float)Math.PI / 180;
+        public float crosshairAngle = START_ANGLE * RAD;
 
         public void LoadContent(ContentManager contentManager)
         {
             LoadContent(contentManager, _fileName);
         }
 
-        public void UpdateCrosshair(GameTime gameTime, KeyboardState currentKeyboardState, Vector2 playerPosition, int directionCoeff)
+        public void UpdateCrosshair(GameTime gameTime, KeyboardState currentKeyboardState, Vector2 parentPosition, int directionCoeff)
         {
             RestrictAngle(directionCoeff);
-
-            if (crosshairAngle > 2 * Math.PI)
-                crosshairAngle = 0;
-            if (crosshairAngle < 0)
-                crosshairAngle = 2 * Math.PI;
-
-            Position.X = playerPosition.X - Origin.X + ((float)Math.Sin(crosshairAngle) * CROSSHAIR_RADIUS);
-            Position.Y = playerPosition.Y - Origin.Y + ((float)Math.Cos(crosshairAngle) * CROSSHAIR_RADIUS);
+            CycleAngle();
+            UpdateCrosshairPosition(parentPosition);
 
             if (currentKeyboardState.IsKeyDown(Keys.Up))
-                crosshairAngle += AIM_SPEED * gameTime.ElapsedGameTime.TotalSeconds * directionCoeff;
-            
+                crosshairAngle += AIM_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds * directionCoeff;
+
             if (currentKeyboardState.IsKeyDown(Keys.Down))
-                crosshairAngle -= AIM_SPEED * gameTime.ElapsedGameTime.TotalSeconds * directionCoeff;
+                crosshairAngle -= AIM_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds * directionCoeff;
         }
 
-        public void RestrictAngle(int directionCoeff)
+        private void RestrictAngle(int directionCoeff)
         {
             if (directionCoeff == 1)
             {
-                if (crosshairAngle > Math.PI)
-                    crosshairAngle = Math.PI;
+                if (crosshairAngle > (float)Math.PI)
+                    crosshairAngle = (float)Math.PI;
                 if (crosshairAngle < 0)
                     crosshairAngle = 0;
             }
 
             if (directionCoeff == -1)
             {
-                if (crosshairAngle < Math.PI)
-                    crosshairAngle = Math.PI;
-                if (crosshairAngle > 2 * Math.PI)
-                    crosshairAngle = 2 * Math.PI;
+                if (crosshairAngle < (float)Math.PI)
+                    crosshairAngle = (float)Math.PI;
+                if (crosshairAngle > 2 * (float)Math.PI)
+                    crosshairAngle = 0;
             }
+        }
 
+        private void CycleAngle()
+        {
+            if (crosshairAngle > 2 * (float)Math.PI)
+                crosshairAngle = 0;
+            if (crosshairAngle < 0)
+                crosshairAngle = 2 * (float)Math.PI;
+        }
+
+        private void UpdateCrosshairPosition(Vector2 parentPosition)
+        {
+            Position.X = parentPosition.X - Origin.X + ((float)Math.Sin(crosshairAngle) * CROSSHAIR_RADIUS);
+            Position.Y = parentPosition.Y - Origin.Y + ((float)Math.Cos(crosshairAngle) * CROSSHAIR_RADIUS);
         }
     }
 }

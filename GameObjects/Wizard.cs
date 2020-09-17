@@ -25,8 +25,7 @@ namespace WizardGrenade
         private ContentManager _contentManager;
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
-
-        public Wizard(int startx, int starty) : base(new Vector2(startx, starty), MASS, FRICTION, false){}
+        public Wizard(int startx, int starty) : base(new Vector2(startx, starty), MASS, FRICTION, false, 0){}
 
         private enum ActiveState
         {
@@ -55,7 +54,7 @@ namespace WizardGrenade
             LoadContent(contentManager, _fileName);
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, List<BlockSprite> terrainPolys)
         {
             _currentKeyboardState = Keyboard.GetState();
 
@@ -65,7 +64,13 @@ namespace WizardGrenade
             ChargeFireball(_currentKeyboardState, _previousKeyboardState, gameTime);
 
             foreach (var fireball in _fireballs)
+            {
                 fireball.Update(gameTime);
+                foreach (var polygon in terrainPolys)
+                {
+                    CheckFireballCollision(fireball, polygon);
+                }
+            }
 
             base.Update(gameTime);
 
@@ -104,7 +109,6 @@ namespace WizardGrenade
             else
             {
                 State = ActiveState.Idle;
-
             }
         }
 
@@ -116,7 +120,7 @@ namespace WizardGrenade
                 _fireballSpeed += (float)gameTime.ElapsedGameTime.TotalSeconds * POWER_COEFFICIENT;
             }
 
-            if (WizardGrenadeGame.KeysReleased(currentKeyboardState, previousKeyboardState, Keys.Space))
+            if (Utility.KeysReleased(currentKeyboardState, previousKeyboardState, Keys.Space))
             {
                 ThrowFireball(_fireballSpeed, gameTime);
                 _fireballSpeed = 0;
@@ -126,9 +130,22 @@ namespace WizardGrenade
 
         public void ThrowFireball(float _fireballSpeed, GameTime gameTime)
         {
-            Fireball fireball = new Fireball(position, _fireballSpeed, (float)crosshair.crosshairAngle, gameTime.TotalGameTime);
+            foreach (var dormantFireball in _fireballs)
+                if (!dormantFireball.inMotion)
+                {
+                    dormantFireball.ThrowAgain(_fireballSpeed, crosshair.crosshairAngle, position);
+                    return;
+                }
+
+            Fireball fireball = new Fireball(position, _fireballSpeed, crosshair.crosshairAngle);
             fireball.LoadContent(_contentManager);
             _fireballs.Add(fireball);
+        }
+
+        public void CheckFireballCollision(Fireball fireball, BlockSprite polygon)
+        {
+            if (Collision.PolyCollisionDectected(fireball, polygon))
+                fireball.OnCollision();
         }
 
         public override void Draw(SpriteBatch spriteBatch)

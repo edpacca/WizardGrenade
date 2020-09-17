@@ -1,25 +1,60 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using WizardGrenade.GameUtilities;
 
 namespace WizardGrenade
 {
-
-
-
     class Collision
     {
-        public static bool PolyCollisionDectected(Polygon polyA, Polygon polyB)
+        public static bool ProjectileCollisionDectected(PhysicalSprite polyA, Polygon polyB)
         {
-            foreach (var collisionPoint in polyA.transformedPolyPoints)
-            {
+            int verticesPolyB = polyB.transformedPolyPoints.Count;
 
+            for (int i = 0; i < polyB.transformedPolyPoints.Count; i++)
+            {
+                int i0 = MathsExt.WrapAround(i, verticesPolyB);
+                int i1 = MathsExt.WrapAround(i + 1, verticesPolyB);
+
+                if (MathsExt.EdgeIntersection(
+                        polyA.position,
+                        polyA.direction,
+                        polyB.transformedPolyPoints[i0],
+                        polyB.transformedPolyPoints[i1]))
+                        return true;
+                
             }
-            return true;
+            return false;
         }
 
+        public static bool PolyCollisionDectected(Polygon polyA, BlockSprite polyB)
+        {
+            int verticesPolyA = polyA.transformedPolyPoints.Count;
+            int verticesPolyB = polyB.transformedPolyPoints.Count;
 
+            for (int i = 0; i < polyA.transformedPolyPoints.Count; i++)
+            {
+                int i0 = MathsExt.WrapAround(i, verticesPolyA);
+                int i1 = MathsExt.WrapAround(i + 1, verticesPolyA);
 
+                for (int j = 0; j < polyB.transformedPolyPoints.Count; j++)
+                {
+                    int j0 = MathsExt.WrapAround(j, verticesPolyB);
+                    int j1 = MathsExt.WrapAround(j + 1, verticesPolyB);
+
+                    if (MathsExt.EdgeIntersection(
+                        polyA.transformedPolyPoints[i0],
+                        polyA.transformedPolyPoints[i1],
+                        polyB.transformedPolyPoints[j0], 
+                        polyB.transformedPolyPoints[j1]))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        // Original system for rectangle/rectangle collisions
 
         public static bool CollisionDetected(Sprite spriteA, Sprite spriteB)
         {
@@ -40,38 +75,6 @@ namespace WizardGrenade
             Rectangle intersection = Rectangle.Intersect(rectangleA, rectangleB);
             return intersection;
         }
-
-        public static float CalcMinTheta (float radius, float minLength)
-        {
-            return 2 * (float)Math.Asin(minLength / (2 * radius));
-        }
-
-        public static List<Vector2> CalcCircleCollisionPoints (float radius, float minLength)
-        {
-            float minTheta = CalcMinTheta(radius, minLength);
-            List<Vector2> relativeCollisionPoints = new List<Vector2>();
-
-            for (float theta = 0; theta <= 2 * Math.PI; theta += minTheta)
-            {
-                relativeCollisionPoints.Add(Physics.VectorComponents(radius, theta));
-            }
-
-            return relativeCollisionPoints;
-        }
-
-        public static List<Vector2> CalcRectangleCollisionPoints(float width, float height)
-        {
-            List<Vector2> relativeCollisionPoints = new List<Vector2>();
-
-            relativeCollisionPoints.Add(new Vector2(0 - width / 2, (0 - height / 2)));
-            relativeCollisionPoints.Add(new Vector2(0 + width / 2, (0 - height / 2)));
-            relativeCollisionPoints.Add(new Vector2(0 - width / 2, (0 + height / 2)));
-            relativeCollisionPoints.Add(new Vector2(0 + width / 2, (0 + height / 2)));
-
-            return relativeCollisionPoints;
-        }
-
-
 
     }
 }
