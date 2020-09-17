@@ -77,42 +77,32 @@ namespace WizardGrenade
             _previousKeyboardState = _currentKeyboardState;
         }
 
-        public void UpdateMovement(KeyboardState currentKeyboardState, GameTime gameTime)
+        private void UpdateMovement(KeyboardState currentKeyboardState, GameTime gameTime)
         {
             if (currentKeyboardState.IsKeyDown(Keys.Left))
-            {
-                State = ActiveState.Walking;
-                //velocity.X -= PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                position.X -= PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                if (Facing != Direction.Left)
-                    crosshair.crosshairAngle = (Physics.FlipAngle(crosshair.crosshairAngle));
-
-                Facing = Direction.Left;
-                spriteEffect = SpriteEffects.None;
-                _directionCoefficient = -1;
-            }
+                Walking(Direction.Left, SpriteEffects.None, -1, gameTime);
 
             else if (currentKeyboardState.IsKeyDown(Keys.Right))
-            {
-                State = ActiveState.Walking;
-                //velocity.X += PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                position.X += PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                if (Facing != Direction.Right)
-                    crosshair.crosshairAngle = (Physics.FlipAngle(crosshair.crosshairAngle));
-
-                Facing = Direction.Right;
-                spriteEffect = SpriteEffects.FlipHorizontally;
-                _directionCoefficient = 1;
-            }
+                Walking(Direction.Right, SpriteEffects.FlipHorizontally, 1, gameTime);
             else
-            {
                 State = ActiveState.Idle;
-            }
         }
 
-        public void ChargeFireball(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
+        private void Walking(Direction direction, SpriteEffects effect, int directionCoef, GameTime gameTime)
+        {
+            State = ActiveState.Walking;
+            //velocity.X += directionCoef * PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position.X += directionCoef * PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (Facing != direction)
+                crosshair.crosshairAngle = (Physics.FlipAngle(crosshair.crosshairAngle));
+
+            Facing = direction;
+            spriteEffect = effect;
+            _directionCoefficient = directionCoef;
+        }
+
+        private void ChargeFireball(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
         {
             if (currentKeyboardState.IsKeyDown(Keys.Space) && _fireballSpeed < 500)
             {
@@ -122,13 +112,13 @@ namespace WizardGrenade
 
             if (Utility.KeysReleased(currentKeyboardState, previousKeyboardState, Keys.Space))
             {
-                ThrowFireball(_fireballSpeed, gameTime);
+                ThrowFireball();
                 _fireballSpeed = 0;
                 State = ActiveState.Throwing;
             }
         }
 
-        public void ThrowFireball(float _fireballSpeed, GameTime gameTime)
+        private void ThrowFireball()
         {
             foreach (var dormantFireball in _fireballs)
                 if (!dormantFireball.inMotion)
@@ -142,7 +132,7 @@ namespace WizardGrenade
             _fireballs.Add(fireball);
         }
 
-        public void CheckFireballCollision(Fireball fireball, BlockSprite polygon)
+        private void CheckFireballCollision(Fireball fireball, BlockSprite polygon)
         {
             if (Collision.PolyCollisionDectected(fireball, polygon))
                 fireball.OnCollision();
