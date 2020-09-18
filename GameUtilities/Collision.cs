@@ -23,7 +23,6 @@ namespace WizardGrenade
                         polyB.transformedPolyPoints[i0],
                         polyB.transformedPolyPoints[i1]))
                         return true;
-                
             }
             return false;
         }

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using WizardGrenade.GameUtilities;
 
 namespace WizardGrenade
@@ -21,6 +22,7 @@ namespace WizardGrenade
         public bool isStable;
         public Vector2 direction = new Vector2(0, 0);
         private float directionNorm = 1;
+        public Animation animation;
 
         private Vector2 _rotationOffset = Vector2.Zero;
         private Vector2 potential = Vector2.Zero;
@@ -41,15 +43,16 @@ namespace WizardGrenade
             _minCollisionPolyPointDistance = minCollisionPolyPointDistance;
         }
 
-        public void LoadContent(ContentManager contentManager, string fileName)
+        public void LoadContent(ContentManager contentManager, string fileName, int frames)
         {
             _spriteTexture = contentManager.Load<Texture2D>(fileName);
-            size = new Rectangle(0, 0, _spriteTexture.Width, _spriteTexture.Height);
-            relativeOrigin = new Vector2(_spriteTexture.Width / 2, _spriteTexture.Height / 2);
-            _radius = Math.Max(_spriteTexture.Width, _spriteTexture.Height) / 2;
+            animation = new Animation(frames);
+            size = new Rectangle(0, 0, _spriteTexture.Width / frames, _spriteTexture.Height);
+            relativeOrigin = new Vector2(size.Width / 2, size.Height / 2);
+            _radius = Math.Max(size.Width, size.Height) / 2;
             _offsetRadius = (float)Math.Sqrt(2 * (_radius * _radius));
             polyPoints = _minCollisionPolyPointDistance == 0 ?
-                MathsExt.CalcRectangleCollisionPoints(_spriteTexture.Width, _spriteTexture.Height) :
+                MathsExt.CalcRectangleCollisionPoints(size.Width, size.Height) :
                 MathsExt.CalcCircleCollisionPoints(_radius, _minCollisionPolyPointDistance);
             LoadPolyContent(contentManager);
         }
@@ -75,8 +78,8 @@ namespace WizardGrenade
 
             UpdatePolyPoints(potential, rotation);
 
-            position = potential;
-
+            UpdatePosition();
+            UpdateAnimationRectangle();
             ResetAcceleration();
             UpdateRotationOffset();
             UpdateXFriction();
@@ -87,11 +90,20 @@ namespace WizardGrenade
 
         }
 
+        private void UpdateAnimationRectangle()
+        {
+            size.X = animation.frame * size.Width;
+        }
 
         private void UpdatePotential(GameTime gameTime)
         {
             potential.X = position.X + velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
             potential.Y = position.Y + velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+
+        private void UpdatePosition()
+        {
+            position = potential;
         }
 
         private void UpdateRotation()
@@ -129,7 +141,7 @@ namespace WizardGrenade
             spriteBatch.Draw(_spriteTexture, position + _rotationOffset,
                 size, Color.White, rotation, Vector2.Zero, 1, spriteEffect, layerDepth);
 
-            DrawCollisionPoints(spriteBatch, position);
+            //DrawCollisionPoints(spriteBatch, position);
         }
     }
 }

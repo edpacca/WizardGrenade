@@ -139,3 +139,4 @@ C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bi
 C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\block1.xnb
 C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\pixel.xnb
 C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\mouse.xnb
+C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\Wizard_spritesheet.xnb

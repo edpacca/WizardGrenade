@@ -9,7 +9,7 @@ namespace WizardGrenade
 {
     class Wizard : PhysicalSprite
     {
-        private readonly string _fileName = "Wizard3";
+        private readonly string _fileName = "Wizard_spritesheet";
         private SpriteFont _statFont;
         private Crosshair crosshair = new Crosshair();
         private List<Fireball> _fireballs = new List<Fireball>();
@@ -29,10 +29,10 @@ namespace WizardGrenade
 
         private enum ActiveState
         {
-            Walking,
-            Idle,
-            Charging,
-            Throwing,
+            Walking = 2,
+            Idle = 0,
+            Charging = 4,
+            Throwing = 12,
         }
 
         private enum Direction
@@ -51,7 +51,7 @@ namespace WizardGrenade
             crosshair.LoadContent(contentManager);
 
             _statFont = contentManager.Load<SpriteFont>("healthFont");
-            LoadContent(contentManager, _fileName);
+            LoadContent(contentManager, _fileName, 13);
         }
 
         public void Update(GameTime gameTime, List<BlockSprite> terrainPolys)
@@ -85,7 +85,11 @@ namespace WizardGrenade
             else if (currentKeyboardState.IsKeyDown(Keys.Right))
                 Walking(Direction.Right, SpriteEffects.FlipHorizontally, 1, gameTime);
             else
+            {
                 State = ActiveState.Idle;
+                animation.frame = (int)State;
+            }
+
         }
 
         private void Walking(Direction direction, SpriteEffects effect, int directionCoef, GameTime gameTime)
@@ -100,6 +104,7 @@ namespace WizardGrenade
             Facing = direction;
             spriteEffect = effect;
             _directionCoefficient = directionCoef;
+            animation.frame = (int)State;
         }
 
         private void ChargeFireball(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
@@ -108,6 +113,7 @@ namespace WizardGrenade
             {
                 State = ActiveState.Charging;
                 _fireballSpeed += (float)gameTime.ElapsedGameTime.TotalSeconds * POWER_COEFFICIENT;
+                animation.frame = (int)State;
             }
 
             if (Utility.KeysReleased(currentKeyboardState, previousKeyboardState, Keys.Space))

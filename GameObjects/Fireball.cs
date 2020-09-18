@@ -13,7 +13,7 @@ namespace WizardGrenade
         private readonly string _fileName = "fireball_single";
         private const float MASS = 30;
         private const float FRICTION = 0.999f;
-        private const int MAX_DISTANCE = 500;
+        private const int MAX_DISTANCE = 1500;
         private const float _minCollisionPolyPointDistance = 3f;
         public Vector2 _initialPosition;
         public bool inMotion;
@@ -51,7 +51,7 @@ namespace WizardGrenade
 
         public void LoadContent (ContentManager contentManager)
         {
-            LoadContent(contentManager, _fileName);
+            LoadContent(contentManager, _fileName, 1);
         }
     }
 }

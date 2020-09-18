@@ -10,26 +10,22 @@ namespace WizardGrenade
 {
     class Animation
     {
-        //List<Texture2D> _frames;
-        //int horizontalTiles;
-        //int verticalTiles;
+        private int[] _animationFrames;
+        public int frame = 0;
 
-        //public List<Texture2D> GenerateFrames(Texture2D spriteSheet, int frameWidth, int frameHeight)
-        //{
-        //    horizontalTiles = spriteSheet.Width / frameWidth;
-        //    verticalTiles = spriteSheet.Height / frameHeight;
+        public Animation(int frames)
+        {
+            _animationFrames = new int[frames];
+        }
 
-        //    for (int x = 0; x < horizontalTiles; x++)
-        //    {
-        //        for (int y = 0; y < verticalTiles; y++)
-        //        {
+        public void UpdateAnimationFrame(int frameSet)
+        {
+            frame = frameSet;
+        }
 
-        //        }
-        //    }
-
-        //}
-
-
-
+        public int GetCurrentFrame()
+        {
+            return frame;
+        }
     }
 }
