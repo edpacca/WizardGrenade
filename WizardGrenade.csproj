@@ -53,7 +53,7 @@
     <Compile Include="GameObjects\PlayerMarker.cs" />
     <Compile Include="GameUtilities\MathsExt.cs" />
     <Compile Include="GameUtilities\Physics.cs" />
-    <Compile Include="GameGenerics\Animation.cs" />
+    <Compile Include="GameGenerics\Animator.cs" />
     <Compile Include="GameGenerics\Polygon.cs" />
     <Compile Include="GameImplementation\TeamOfPlayers.cs" />
     <Compile Include="GameGenerics\BlockSprite.cs" />

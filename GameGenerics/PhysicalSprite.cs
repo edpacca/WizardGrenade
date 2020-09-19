@@ -22,7 +22,6 @@ namespace WizardGrenade
         public bool isStable;
         public Vector2 direction = new Vector2(0, 0);
         private float directionNorm = 1;
-        public Animation animation;
 
         private Vector2 _rotationOffset = Vector2.Zero;
         private Vector2 potential = Vector2.Zero;
@@ -32,6 +31,7 @@ namespace WizardGrenade
         private float _friction;
         private bool _canRotate;
         private float _minCollisionPolyPointDistance;
+        private int _frames;
 
         public PhysicalSprite(Vector2 initialPosition, float mass, float friction, bool canRotate, float minCollisionPolyPointDistance)
         {
@@ -46,11 +46,11 @@ namespace WizardGrenade
         public void LoadContent(ContentManager contentManager, string fileName, int frames)
         {
             _spriteTexture = contentManager.Load<Texture2D>(fileName);
-            animation = new Animation(frames);
             size = new Rectangle(0, 0, _spriteTexture.Width / frames, _spriteTexture.Height);
             relativeOrigin = new Vector2(size.Width / 2, size.Height / 2);
             _radius = Math.Max(size.Width, size.Height) / 2;
             _offsetRadius = (float)Math.Sqrt(2 * (_radius * _radius));
+            _frames = frames;
             polyPoints = _minCollisionPolyPointDistance == 0 ?
                 MathsExt.CalcRectangleCollisionPoints(size.Width, size.Height) :
                 MathsExt.CalcCircleCollisionPoints(_radius, _minCollisionPolyPointDistance);
@@ -79,7 +79,7 @@ namespace WizardGrenade
             UpdatePolyPoints(potential, rotation);
 
             UpdatePosition();
-            UpdateAnimationRectangle();
+
             ResetAcceleration();
             UpdateRotationOffset();
             UpdateXFriction();
@@ -88,11 +88,6 @@ namespace WizardGrenade
         public void CheckCollision()
         {
 
-        }
-
-        private void UpdateAnimationRectangle()
-        {
-            size.X = animation.frame * size.Width;
         }
 
         private void UpdatePotential(GameTime gameTime)
@@ -134,6 +129,16 @@ namespace WizardGrenade
 
             if (velocity.X > 0 && velocity.X < 0.01f || velocity.X < 0 && velocity.X > -0.01f)
                 velocity.X = 0;
+        }
+
+        public int SpriteFrameWidth()
+        {
+            return _spriteTexture.Width / _frames;
+        }
+
+        public void UpdateAnimationRectangle(int framePosition)
+        {
+            size.X = framePosition;
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)

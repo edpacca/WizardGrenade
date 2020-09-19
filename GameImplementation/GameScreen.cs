@@ -49,7 +49,7 @@ namespace WizardGrenade
             _mouse.Position.X = _currentMouseState.X - 2.5f;
             _mouse.Position.Y = _currentMouseState.Y - 2.5f;
 
-            _wizard.Update(gameTime, _blockSetter._blocks);
+            _wizard.Update(gameTime);
             _blockSetter.Update(gameTime);
 
             _previousKeyboardState = _currentKeyboardState;

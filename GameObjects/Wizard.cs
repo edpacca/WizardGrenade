@@ -16,6 +16,7 @@ namespace WizardGrenade
 
         private const int PLAYER_SPEED = 100;
         private const int POWER_COEFFICIENT = 400;
+        private const int MAX_THROW_POWER = 500;
         private const float FRICTION = 0.5f;
         private int _directionCoefficient = 1;
 
@@ -27,12 +28,28 @@ namespace WizardGrenade
         private KeyboardState _previousKeyboardState;
         public Wizard(int startx, int starty) : base(new Vector2(startx, starty), MASS, FRICTION, false, 0){}
 
-        private enum ActiveState
+        private Animator _animator;
+        private const int _frames = 13;
+        private bool _continueAnimationSequence;
+        private float elapsedAnimationTime = 0;
+
+        private Dictionary<string, int[]> _animationStates = new Dictionary<string, int[]>()
         {
-            Walking = 2,
-            Idle = 0,
-            Charging = 4,
-            Throwing = 12,
+            ["Idle"] = new int[] { 0 },
+            ["Walking"] = new int[] { 1, 2 },
+            ["Charging1"] = new int[] { 3, 4, 5, 6 },
+            ["Charging2"] = new int[] { 7, 8 },
+            ["Throwing1"] = new int[] { 9, 10 },
+            ["Throwing2"] = new int[] { 11 },
+            ["Weak"] = new int[] { 12 }
+        };
+
+        private enum ActiveAnimationState
+        {
+            Idle,
+            Walking,
+            Charging,
+            Throwing,
         }
 
         private enum Direction
@@ -42,23 +59,42 @@ namespace WizardGrenade
             Right,
         }
 
-        private ActiveState State;
+        private ActiveAnimationState State;
         private Direction Facing;
 
         public void LoadContent(ContentManager contentManager)
         {
             _contentManager = contentManager;
             crosshair.LoadContent(contentManager);
-
             _statFont = contentManager.Load<SpriteFont>("healthFont");
-            LoadContent(contentManager, _fileName, 13);
+            LoadContent(contentManager, _fileName, _frames);
+            _animator = new Animator(_animationStates, SpriteFrameWidth());
         }
 
-        public void Update(GameTime gameTime, List<BlockSprite> terrainPolys)
+        private void ContinueStateAnimationSequence(string stateName, float frameRate, GameTime gameTime, TimeSpan continueFor)
+        {
+            elapsedAnimationTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (elapsedAnimationTime < continueFor.TotalSeconds)
+            {
+                UpdateAnimationRectangle(_animator.GetAnimationFrames(stateName, frameRate, gameTime));
+            }
+            else
+            {
+                State = ActiveAnimationState.Idle;
+                elapsedAnimationTime = 0;
+            }
+        }
+
+        public override void Update(GameTime gameTime)
         {
             _currentKeyboardState = Keyboard.GetState();
 
+            if (State == ActiveAnimationState.Throwing)
+                ContinueStateAnimationSequence("Throwing1", 12, gameTime, new TimeSpan(0, 0, 0, 0, 500));
+
             UpdateMovement(_currentKeyboardState, gameTime);
+
             crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, position, _directionCoefficient);
 
             ChargeFireball(_currentKeyboardState, _previousKeyboardState, gameTime);
@@ -66,10 +102,6 @@ namespace WizardGrenade
             foreach (var fireball in _fireballs)
             {
                 fireball.Update(gameTime);
-                foreach (var polygon in terrainPolys)
-                {
-                    CheckFireballCollision(fireball, polygon);
-                }
             }
 
             base.Update(gameTime);
@@ -86,15 +118,14 @@ namespace WizardGrenade
                 Walking(Direction.Right, SpriteEffects.FlipHorizontally, 1, gameTime);
             else
             {
-                State = ActiveState.Idle;
-                animation.frame = (int)State;
+                if (State == ActiveAnimationState.Idle)
+                    UpdateAnimationRectangle(_animator.GetSingleFrame("Idle"));
             }
-
         }
 
         private void Walking(Direction direction, SpriteEffects effect, int directionCoef, GameTime gameTime)
         {
-            State = ActiveState.Walking;
+            int walkingFrameRate = 10;
             //velocity.X += directionCoef * PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
             position.X += directionCoef * PLAYER_SPEED * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -104,23 +135,28 @@ namespace WizardGrenade
             Facing = direction;
             spriteEffect = effect;
             _directionCoefficient = directionCoef;
-            animation.frame = (int)State;
+            if (!_continueAnimationSequence)
+                UpdateAnimationRectangle(_animator.GetAnimationFrames("Walking", walkingFrameRate, gameTime));
         }
 
         private void ChargeFireball(KeyboardState currentKeyboardState, KeyboardState previousKeyboardState, GameTime gameTime)
         {
-            if (currentKeyboardState.IsKeyDown(Keys.Space) && _fireballSpeed < 500)
+            if (currentKeyboardState.IsKeyDown(Keys.Space) && _fireballSpeed < MAX_THROW_POWER)
             {
-                State = ActiveState.Charging;
+                State = ActiveAnimationState.Charging;
                 _fireballSpeed += (float)gameTime.ElapsedGameTime.TotalSeconds * POWER_COEFFICIENT;
-                animation.frame = (int)State;
+                UpdateAnimationRectangle(_animator.GetAnimationFrameSequence("Charging1", "Charging2", 6, 4, gameTime));
             }
+
+            if (_fireballSpeed >= MAX_THROW_POWER)
+                UpdateAnimationRectangle(_animator.GetAnimationFrames("Charging2", 16, gameTime));
 
             if (Utility.KeysReleased(currentKeyboardState, previousKeyboardState, Keys.Space))
             {
+                _animator.ResetSequence();
+                State = ActiveAnimationState.Throwing;
                 ThrowFireball();
                 _fireballSpeed = 0;
-                State = ActiveState.Throwing;
             }
         }
 
