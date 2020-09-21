@@ -20,7 +20,7 @@ namespace WizardGrenade
         public Vector2 _initialPosition;
         public bool inMotion;
 
-        private float _fuse = 1;
+        private float _fuse = 3;
         private float _fuseTimer = 0;
         public Explosion _explosion = new Explosion();
 
@@ -32,7 +32,7 @@ namespace WizardGrenade
             inMotion = true;
         }
 
-        public override void Update(GameTime gameTime, bool[] collpoints)
+        public override void Update(GameTime gameTime, bool[,] collpoints)
         {
             //if (Vector2.Distance(_initialPosition, position) > MAX_DISTANCE)
             //    inMotion = false;

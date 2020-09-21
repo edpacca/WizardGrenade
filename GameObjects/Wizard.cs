@@ -23,21 +23,18 @@ namespace WizardGrenade
         private const float MASS = 2;
         private float _fireballSpeed;
 
-        private bool[] _collisionMap;
+        private bool[,] _collisionMap;
 
         private ContentManager _contentManager;
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
-        public Wizard(int startx, int starty) : base(new Vector2(startx, starty), MASS, FRICTION, false, 0)
-        {
-
-        }
+        public Wizard(int startx, int starty) : base(new Vector2(startx, starty), MASS, FRICTION, false, 4){}
 
         private Animator _animator;
         private const int _frames = 13;
         private float elapsedAnimationTime = 0;
 
-        public void GetCollisionMap(bool[] collisionMap)
+        public void GetCollisionMap(bool[,] collisionMap)
         {
             _collisionMap = collisionMap;
         }

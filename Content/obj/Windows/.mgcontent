@@ -13,6 +13,7 @@
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/explosion.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/fireball_single.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/healthFont.spritefont</File>
+    <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Map1.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/MapSingleTerrain.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/mouse.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/pixel.png</File>
@@ -32,6 +33,7 @@
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File>crosshair.png</File>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

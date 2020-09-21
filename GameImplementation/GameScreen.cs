@@ -21,7 +21,7 @@ namespace WizardGrenade
 
         public void Initialize()
         {
-            _wizard = new Wizard(WizardGrenadeGame.SCREEN_WIDTH / 2 - 300, WizardGrenadeGame.SCREEN_HEIGHT / 2 - 400);
+            _wizard = new Wizard(WizardGrenadeGame.SCREEN_WIDTH / 2 - 300, WizardGrenadeGame.SCREEN_HEIGHT / 2);
             _blockSetter = new BlockSetter();
             _mouse = new Sprite();
             _map = new Map();
@@ -54,15 +54,11 @@ namespace WizardGrenade
             _map.Update();
 
             _wizard.Update(gameTime);
-
-            if (_map.CollidesWithMap(_wizard.position))
-                _wizard.acceleration = Vector2.Zero;
-            //foreach (var fireball in _wizard._fireballs)
-            //{
-            //    if (fireball._explosion._exploded)
-            //        _map.DeformLevel(fireball._explosion._explosionRadius, fireball._explosion.Position);
-            //}
-
+            foreach (var fireball in _wizard._fireballs)
+            {
+                if (fireball._explosion._exploded)
+                    _map.DeformLevel(fireball._explosion._explosionRadius, fireball.position);
+            }
             _blockSetter.Update(gameTime);
 
             _previousKeyboardState = _currentKeyboardState;

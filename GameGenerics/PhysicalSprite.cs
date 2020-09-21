@@ -58,7 +58,7 @@ namespace WizardGrenade
 
         }
 
-        public virtual void Update(GameTime gameTime, bool[] collisionMap)
+        public virtual void Update(GameTime gameTime, bool[,] collisionMap)
         {
             acceleration.Y += Physics.GRAVITY * _mass;
 
@@ -67,8 +67,7 @@ namespace WizardGrenade
             //if (Keyboard.GetState().IsKeyDown(Keys.F))
             //    acceleration.Y -= 10000f * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            velocity.X += acceleration.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            velocity.Y += acceleration.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            velocity += acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             directionNorm = _radius / MathsExt.VectorMagnitude(velocity);
             direction = position + Vector2.Multiply(velocity, directionNorm);
@@ -76,39 +75,55 @@ namespace WizardGrenade
             UpdateRotation();
 
             UpdatePotential(gameTime);
-
             UpdatePolyPoints(potential, rotation);
-            
-            if (CheckCollision(collisionMap, 580, polyPoints).Count == 0)
+
+            List<Vector2> collidingPoints = CheckCollision(collisionMap, transformedPolyPoints);
+
+            if (collidingPoints.Count == 0)
                 UpdatePosition();
+            else
+            {
+                UpdateResponseVector(gameTime, ResponseVector(collidingPoints, position));
+            }
 
             ResetAcceleration();
             UpdateRotationOffset();
             UpdateXFriction();
         }
 
-        public List<Vector2> CheckCollision(bool[] collisionData, int mapwidth, List<Vector2> collisionPointss)
+        public List<Vector2> CheckCollision(bool[,] collisionData, List<Vector2> targetCollisionPoints)
         {
-
-            
             var collidingPoints = new List<Vector2>();
 
-            foreach (var point in collisionPointss)
+            foreach (var point in targetCollisionPoints)
             {
-                if (point.X > 0 && point.X < collisionData.Length / 307 && point.Y > 0 && point.Y < collisionData.Length / mapwidth)
-                {
-                    if (collisionData[(int)point.X + (int)point.Y * mapwidth])
-                        collidingPoints.Add(point);
-                }
+                if (point.X >= 0 && point.Y >= 0)
+                    if (collisionData[(int)Math.Round(point.X,0),(int)Math.Round(point.Y, 0)])
+                       collidingPoints.Add(point);
             }
 
             return collidingPoints;
         }
 
+        public Vector2 ResponseVector(List<Vector2> collisionPoints, Vector2 centre)
+        {
+            var responseVector = Vector2.Zero;
+            foreach (var point in collisionPoints)
+            {
+                Vector2.Add(responseVector,(Vector2.Subtract(centre, point)));
+            }
+            return responseVector;
+  
+        }
+
+        private void UpdateResponseVector(GameTime gameTime, Vector2 responseVector)
+        {
+            position += responseVector * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
+
         private void UpdatePotential(GameTime gameTime)
         {
-            potential.X = position.X + velocity.X * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            potential.Y = position.Y + velocity.Y * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            potential = position + velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         private void UpdatePosition()
@@ -161,7 +176,7 @@ namespace WizardGrenade
             spriteBatch.Draw(_spriteTexture, position + _rotationOffset,
                 size, Color.White, rotation, Vector2.Zero, 1, spriteEffect, layerDepth);
 
-            //DrawCollisionPoints(spriteBatch, position);
+            DrawCollisionPoints(spriteBatch, position);
         }
     }
 }
