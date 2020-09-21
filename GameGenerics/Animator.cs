@@ -37,6 +37,9 @@ namespace WizardGrenade
             int numberOfFrames = _animationStates[state].Length;
             elapsedFrameTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            if (_currentFrameIndex >= numberOfFrames)
+                _currentFrameIndex = 0;
+
             if (elapsedFrameTime < (float)(1 / targetFrameRate))
                 return _animationStates[state][_currentFrameIndex];
             else
@@ -51,6 +54,9 @@ namespace WizardGrenade
         {
             int numberOfFrames = _animationStates[state].Length;
             elapsedFrameTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (_currentFrameIndex >= numberOfFrames)
+                _currentFrameIndex = 0;
 
             if (elapsedFrameTime < (float)(1 / targetFrameRate))
                 return _animationStates[state][_currentFrameIndex];

@@ -14,7 +14,7 @@ namespace WizardGrenade
 
         private const int ScreenResolutionWidth = 1920;
         private const int ScreenResolutionHeight = 1080;
-        private const float TargetScreenWidth = 800;
+        private const float TargetScreenWidth = 1200;
         private const float TargetScreenHeight = TargetScreenWidth * 0.5625f;
         private Matrix Scale;
 

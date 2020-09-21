@@ -10,6 +10,7 @@ namespace WizardGrenade
         public Vector2 Position = new Vector2(0, 0);
         public Vector2 Origin;
         public Rectangle Size;
+        public float Scale = 1;
         private Texture2D _spriteTexture;
         
         public void LoadContent(ContentManager contentManager, string fileName)
@@ -21,8 +22,8 @@ namespace WizardGrenade
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_spriteTexture, Position,
-                Size, Color.White, 0.0f, Vector2.Zero, 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(_spriteTexture, Position - (Origin * Scale),
+                Size, Color.White, 0.0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
 
         public virtual void DrawHit(SpriteBatch spriteBatch)

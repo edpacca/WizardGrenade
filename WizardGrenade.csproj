@@ -44,6 +44,8 @@
     <Compile Include="GameObjects\Block.cs" />
     <Compile Include="GameImplementation\BlockSetter.cs" />
     <Compile Include="GameImplementation\OldGameScreen.cs" />
+    <Compile Include="GameObjects\Explosion.cs" />
+    <Compile Include="GameObjects\Map.cs" />
     <Compile Include="GameUtilities\Collision.cs" />
     <Compile Include="GameObjects\Crosshair.cs" />
     <Compile Include="GameObjects\Fireball.cs" />

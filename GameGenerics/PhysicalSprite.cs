@@ -55,9 +55,10 @@ namespace WizardGrenade
                 MathsExt.CalcRectangleCollisionPoints(size.Width, size.Height) :
                 MathsExt.CalcCircleCollisionPoints(_radius, _minCollisionPolyPointDistance);
             LoadPolyContent(contentManager);
+
         }
 
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime, bool[] collisionMap)
         {
             acceleration.Y += Physics.GRAVITY * _mass;
 
@@ -77,17 +78,31 @@ namespace WizardGrenade
             UpdatePotential(gameTime);
 
             UpdatePolyPoints(potential, rotation);
-
-            UpdatePosition();
+            
+            if (CheckCollision(collisionMap, 580, polyPoints).Count == 0)
+                UpdatePosition();
 
             ResetAcceleration();
             UpdateRotationOffset();
             UpdateXFriction();
         }
 
-        public void CheckCollision()
+        public List<Vector2> CheckCollision(bool[] collisionData, int mapwidth, List<Vector2> collisionPointss)
         {
 
+            
+            var collidingPoints = new List<Vector2>();
+
+            foreach (var point in collisionPointss)
+            {
+                if (point.X > 0 && point.X < collisionData.Length / 307 && point.Y > 0 && point.Y < collisionData.Length / mapwidth)
+                {
+                    if (collisionData[(int)point.X + (int)point.Y * mapwidth])
+                        collidingPoints.Add(point);
+                }
+            }
+
+            return collidingPoints;
         }
 
         private void UpdatePotential(GameTime gameTime)
