@@ -20,7 +20,7 @@ namespace WizardGrenade
         private const float FRICTION = 0.5f;
         private int _directionCoefficient = 1;
 
-        private const float MASS = 2;
+        private const float MASS = 50;
         private float _fireballSpeed;
 
         private bool[,] _collisionMap;
@@ -194,7 +194,7 @@ namespace WizardGrenade
                 new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 100), Color.Yellow);
             spriteBatch.DrawString(_statFont, "State: " + State,
                 new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 80), Color.Yellow);
-            spriteBatch.DrawString(_statFont, "Rotation: " + ((180 / Math.PI) * rotation).ToString("0.0"),
+            spriteBatch.DrawString(_statFont, "Velocty: " + velocity.X.ToString("0.0") + ", " + velocity.Y.ToString("0.0"),
                 new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 60), Color.Yellow);
 
             foreach (var fireball in _fireballs)

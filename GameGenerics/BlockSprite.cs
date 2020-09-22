@@ -54,7 +54,7 @@ namespace WizardGrenade
                 _rotationOffset.X = -_spriteTexture.Width / 2 * (float)Math.Cos(rotation) + (_spriteTexture.Height / 2 * (float)Math.Sin(rotation));
                 _rotationOffset.Y = -_spriteTexture.Height / 2 * (float)Math.Cos(rotation) - (_spriteTexture.Width / 2 * (float)Math.Sin(rotation));
 
-                UpdatePolyPoints(position, rotation);
+                UpdateCollisionPoints(position, rotation);
 
                 _previousKBState = _currentKBState;
             }

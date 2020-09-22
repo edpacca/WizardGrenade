@@ -19,7 +19,7 @@ namespace WizardGrenade
                 transformedPolyPoints.Add(point);
         }
 
-        public void UpdatePolyPoints (Vector2 position, float rotation)
+        public void UpdateCollisionPoints (Vector2 position, float rotation)
         {
             for (int i = 0; i < transformedPolyPoints.Count; i++)
                 transformedPolyPoints[i] = Vector2.Transform(polyPoints[i], Matrix.CreateRotationZ(rotation)) + position;

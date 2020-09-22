@@ -16,7 +16,7 @@ namespace WizardGrenade
         public Vector2 relativeOrigin;
         public Rectangle size;
         public Vector2 position;
-        public float rotation = 0.0f;
+        public float rotation = 0f;
         public Vector2 velocity = new Vector2(0, 0);
         public Vector2 acceleration = new Vector2(0, 0);
         public bool isStable;
@@ -57,73 +57,95 @@ namespace WizardGrenade
 
         public virtual void Update(GameTime gameTime, bool[,] collisionMap)
         {
-            acceleration.Y += Physics.GRAVITY * _mass;
-            velocity += acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            ApplyGravity();
+            UpdateVelocity(gameTime);
+
+            UpdatePotentialPosition(gameTime);
+            UpdateCollisionPoints(potential, rotation);
+
+            ResetAcceleration();
             UpdateRotation();
 
-            UpdatePotential(gameTime);
-            UpdatePolyPoints(potential, rotation);
+            ResolveCollisions(gameTime, collisionMap);
 
+            UpdateRotationOffset();
+            UpdateFriction();
+        }
+
+        public void ResolveCollisions(GameTime gameTime, bool[,] collisionMap)
+        {
             List<Vector2> collidingPoints = CheckCollision(collisionMap, transformedPolyPoints);
 
-            if (collidingPoints.Count == 0)
+            if (collidingPoints.Count > 0)
             {
-                UpdatePosition();
+                isStable = true;
+                Vector2 reflection = MathsExt.ReflectionVector(velocity, CalculateResponseVector(collidingPoints, potential));
+                UpdateResponseVelocity(gameTime, reflection);
+                UpdateCollisionPoints(position, rotation);
             }
             else
             {
-                UpdateResponseVector(gameTime, ResponseVector(collidingPoints, position));
+                UpdateRealPosition();
             }
-
-            ResetAcceleration();
-            UpdateRotationOffset();
-            UpdateXFriction();
         }
 
-        public List<Vector2> CheckCollision(bool[,] collisionData, List<Vector2> targetCollisionPoints)
+        public List<Vector2> CheckCollision(bool[,] collisionMap, List<Vector2> collisionPoints)
         {
             var collidingPoints = new List<Vector2>();
 
-            foreach (var point in targetCollisionPoints)
+            foreach (var point in collisionPoints)
             {
                 if (point.X >= 0 && point.Y >= 0 && 
-                    point.X < collisionData.GetLength(0) - 1 && point.Y < collisionData.GetLength(1) - 1)
-                    if (collisionData[(int)Math.Round(point.X,0),(int)Math.Round(point.Y, 0)])
-                       collidingPoints.Add(point);
+                    point.X < collisionMap.GetLength(0) - 1 && 
+                    point.Y < collisionMap.GetLength(1) - 1)
+                    if (collisionMap[(int)point.X, (int)point.Y] == true)
+                    {
+                        collidingPoints.Add(point);
+                    }
             }
 
             return collidingPoints;
         }
 
-        public Vector2 ResponseVector(List<Vector2> collisionPoints, Vector2 centre)
+        public void ApplyGravity()
         {
-            Vector2 responseVector = Vector2.Zero;
-            foreach (var point in collisionPoints)
-            {
-                responseVector += Vector2.Subtract(centre, point);
-            }
-            return responseVector;
+            acceleration.Y += Physics.GRAVITY * _mass;
         }
 
-        private void UpdateResponseVector(GameTime gameTime, Vector2 responseVector)
+        public void UpdateVelocity(GameTime gameTime)
         {
-            position += responseVector * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            velocity += acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        private void UpdatePotential(GameTime gameTime)
+        private void UpdatePotentialPosition(GameTime gameTime)
         {
             potential = position + velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
-        private void UpdatePosition()
+        private void UpdateRealPosition()
         {
             position = potential;
+        }
+
+        public Vector2 CalculateResponseVector(List<Vector2> collisionPoints, Vector2 centre)
+        {
+            Vector2 responseVector = Vector2.Zero;
+            foreach (var point in collisionPoints)
+                responseVector += Vector2.Subtract(point, centre);
+
+            return responseVector;
+        }
+
+        private void UpdateResponseVelocity(GameTime gameTime, Vector2 reflection)
+        {
+            velocity = reflection * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         private void UpdateRotation()
         {
             if (_canRotate)
                 rotation = (float)(Math.Atan2(velocity.Y, velocity.X));
+
             if (rotation > 2 * Math.PI)
                 rotation -= (float)(2 * Math.PI);
             if (rotation < 0)
@@ -142,12 +164,15 @@ namespace WizardGrenade
             isStable = false;
         }
 
-        private void UpdateXFriction()
+        private void UpdateFriction()
         {
-            velocity.X *= _friction;
+            velocity *= _friction;
 
             if (velocity.X > 0 && velocity.X < 0.01f || velocity.X < 0 && velocity.X > -0.01f)
                 velocity.X = 0;
+            if (velocity.Y > 0 && velocity.Y < 0.01f || velocity.Y < 0 && velocity.Y > -0.01f)
+                velocity.Y = 0;
+
         }
 
         public int SpriteFrameWidth()

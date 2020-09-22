@@ -57,7 +57,9 @@ namespace WizardGrenade.GameObjects
             {
                 for (int y = 0; y < 2 * blastRadius; y++)
                 {
-                    if (MathsExt.isWithinCircleInSquare(blastRadius, x, y))
+                    if (MathsExt.isWithinCircleInSquare(blastRadius, x, y) && 
+                        blastPosition.X + x - blastRadius < _mapCollisionData.GetLength(0) &&
+                        blastPosition.Y + y - blastRadius < _mapCollisionData.GetLength(1)) 
                     {
                         _mapPixelData[((int)blastPosition.X + x - blastRadius) + ((int)blastPosition.Y + y - blastRadius) * _mapTexture.Width] = 0;
                         _mapCollisionData[(int)blastPosition.X + x - blastRadius, ((int)blastPosition.Y + y - blastRadius)] = false;
