@@ -20,8 +20,6 @@ namespace WizardGrenade
         public Vector2 velocity = new Vector2(0, 0);
         public Vector2 acceleration = new Vector2(0, 0);
         public bool isStable;
-        public Vector2 direction = new Vector2(0, 0);
-        private float directionNorm = 1;
 
         private Vector2 _rotationOffset = Vector2.Zero;
         private Vector2 potential = Vector2.Zero;
@@ -55,23 +53,12 @@ namespace WizardGrenade
                 MathsExt.CalcRectangleCollisionPoints(size.Width, size.Height) :
                 MathsExt.CalcCircleCollisionPoints(_radius, _minCollisionPolyPointDistance);
             LoadPolyContent(contentManager);
-
         }
 
         public virtual void Update(GameTime gameTime, bool[,] collisionMap)
         {
             acceleration.Y += Physics.GRAVITY * _mass;
-
-            //if (Keyboard.GetState().IsKeyDown(Keys.G))
-            //    acceleration.Y += 10000f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            //if (Keyboard.GetState().IsKeyDown(Keys.F))
-            //    acceleration.Y -= 10000f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             velocity += acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            directionNorm = _radius / MathsExt.VectorMagnitude(velocity);
-            direction = position + Vector2.Multiply(velocity, directionNorm);
-
             UpdateRotation();
 
             UpdatePotential(gameTime);
@@ -80,7 +67,9 @@ namespace WizardGrenade
             List<Vector2> collidingPoints = CheckCollision(collisionMap, transformedPolyPoints);
 
             if (collidingPoints.Count == 0)
+            {
                 UpdatePosition();
+            }
             else
             {
                 UpdateResponseVector(gameTime, ResponseVector(collidingPoints, position));
@@ -97,7 +86,8 @@ namespace WizardGrenade
 
             foreach (var point in targetCollisionPoints)
             {
-                if (point.X >= 0 && point.Y >= 0)
+                if (point.X >= 0 && point.Y >= 0 && 
+                    point.X < collisionData.GetLength(0) - 1 && point.Y < collisionData.GetLength(1) - 1)
                     if (collisionData[(int)Math.Round(point.X,0),(int)Math.Round(point.Y, 0)])
                        collidingPoints.Add(point);
             }
@@ -107,13 +97,12 @@ namespace WizardGrenade
 
         public Vector2 ResponseVector(List<Vector2> collisionPoints, Vector2 centre)
         {
-            var responseVector = Vector2.Zero;
+            Vector2 responseVector = Vector2.Zero;
             foreach (var point in collisionPoints)
             {
-                Vector2.Add(responseVector,(Vector2.Subtract(centre, point)));
+                responseVector += Vector2.Subtract(centre, point);
             }
             return responseVector;
-  
         }
 
         private void UpdateResponseVector(GameTime gameTime, Vector2 responseVector)

@@ -95,5 +95,13 @@ namespace WizardGrenade.GameUtilities
 
             return relativeCollisionPoints;
         }
+
+        public static bool isWithinCircleInSquare(int radius, int x, int y)
+        {
+            if (Math.Pow((x - radius), 2) + Math.Pow((y - radius), 2) <= Math.Pow(radius, 2))
+                return true;
+
+            return false;
+        }
     }
 }

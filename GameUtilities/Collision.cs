@@ -8,25 +8,6 @@ namespace WizardGrenade
 {
     class Collision
     {
-        public static bool ProjectileCollisionDectected(PhysicalSprite polyA, Polygon polyB)
-        {
-            int verticesPolyB = polyB.transformedPolyPoints.Count;
-
-            for (int i = 0; i < polyB.transformedPolyPoints.Count; i++)
-            {
-                int i0 = MathsExt.WrapAround(i, verticesPolyB);
-                int i1 = MathsExt.WrapAround(i + 1, verticesPolyB);
-
-                if (MathsExt.EdgeIntersection(
-                        polyA.position,
-                        polyA.direction,
-                        polyB.transformedPolyPoints[i0],
-                        polyB.transformedPolyPoints[i1]))
-                        return true;
-            }
-            return false;
-        }
-
         public static bool PolyCollisionDectected(Polygon polyA, BlockSprite polyB)
         {
             int verticesPolyA = polyA.transformedPolyPoints.Count;
@@ -54,7 +35,6 @@ namespace WizardGrenade
         }
 
         // Original system for rectangle/rectangle collisions
-
         public static bool CollisionDetected(Sprite spriteA, Sprite spriteB)
         {
             Rectangle spriteARectangle = new Rectangle((int)spriteA.Position.X, (int)spriteA.Position.Y, spriteA.Size.Width, spriteA.Size.Height);
