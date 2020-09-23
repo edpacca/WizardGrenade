@@ -6,6 +6,7 @@
   <SourceFiles>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/../../Graphics/block1.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/../../Graphics/target1_crop.png</File>
+    <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/../../Graphics/testMap.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/ActivePlayer.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/block0.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/castle.png</File>
@@ -29,6 +30,7 @@
   <DestFiles>
     <File>block1.png</File>
     <File>target1_crop.png</File>
+    <File>testMap.png</File>
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

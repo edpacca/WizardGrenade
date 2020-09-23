@@ -15,7 +15,8 @@ namespace WizardGrenade.GameObjects
 
         public void LoadContent(ContentManager contentManager)
         {
-            _mapTexture = contentManager.Load<Texture2D>("Map1");
+            //_mapTexture = contentManager.Load<Texture2D>("Map1");
+            _mapTexture = contentManager.Load<Texture2D>("testMap");
 
             _mapPixelData = new uint[_mapTexture.Width * _mapTexture.Height];
             _mapTexture.GetData(_mapPixelData, 0, _mapTexture.Width * _mapTexture.Height);
@@ -57,9 +58,11 @@ namespace WizardGrenade.GameObjects
             {
                 for (int y = 0; y < 2 * blastRadius; y++)
                 {
-                    if (MathsExt.isWithinCircleInSquare(blastRadius, x, y) && 
-                        blastPosition.X + x - blastRadius < _mapCollisionData.GetLength(0) &&
-                        blastPosition.Y + y - blastRadius < _mapCollisionData.GetLength(1)) 
+                    if (MathsExt.isWithinCircleInSquare(blastRadius, x, y) &&
+                        blastPosition.X + x - blastRadius < _mapCollisionData.GetLength(0) - 1 &&
+                        blastPosition.Y + y - blastRadius < _mapCollisionData.GetLength(1) - 1 &&
+                        blastPosition.X + x - blastRadius >= 0 &&
+                        blastPosition.Y + y - blastRadius >= 0)
                     {
                         _mapPixelData[((int)blastPosition.X + x - blastRadius) + ((int)blastPosition.Y + y - blastRadius) * _mapTexture.Width] = 0;
                         _mapCollisionData[(int)blastPosition.X + x - blastRadius, ((int)blastPosition.Y + y - blastRadius)] = false;

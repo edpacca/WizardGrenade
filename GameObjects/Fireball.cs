@@ -37,12 +37,12 @@ namespace WizardGrenade
             //if (Vector2.Distance(_initialPosition, position) > MAX_DISTANCE)
             //    inMotion = false;
 
-            if (_fuseTimer > _fuse)
-            {
-                _explosion.DrawExplosion(position);
-                inMotion = false;
-                _fuseTimer = 0;
-            }
+            //if (_fuseTimer > _fuse)
+            //{
+            //    _explosion.DrawExplosion(position);
+            //    inMotion = false;
+            //    _fuseTimer = 0;
+            //}
 
             if (inMotion)
             {

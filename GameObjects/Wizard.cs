@@ -17,7 +17,7 @@ namespace WizardGrenade
         private const int PLAYER_SPEED = 100;
         private const int POWER_COEFFICIENT = 400;
         private const int MAX_THROW_POWER = 500;
-        private const float FRICTION = 0.5f;
+        private const float FRICTION = 0.98f;
         private int _directionCoefficient = 1;
 
         private const float MASS = 50;

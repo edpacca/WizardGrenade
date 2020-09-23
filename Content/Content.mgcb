@@ -37,6 +37,18 @@
 /processorParam:TextureFormat=Color
 /build:../../Graphics/target1_crop.png;target1_crop.png
 
+#begin ../../Graphics/testMap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:../../Graphics/testMap.png;testMap.png
+
 #begin ActivePlayer.png
 /importer:TextureImporter
 /processor:TextureProcessor

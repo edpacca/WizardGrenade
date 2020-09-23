@@ -77,6 +77,11 @@ namespace WizardGrenade.GameUtilities
             return vector1.X * vector2.X + vector1.Y * vector2.Y;
         }
 
+        public static Vector2 NormaliseVector(Vector2 vector)
+        {
+            return vector / (VectorMagnitude(vector));
+        }
+
         public static float VectorAngle(Vector2 vector1, Vector2 vector2)
         {
             float v1Mag = VectorMagnitude(vector1);
@@ -85,9 +90,19 @@ namespace WizardGrenade.GameUtilities
             return (float)Math.Acos(DotProduct(vector1, vector2) / (v1Mag * v2Mag));
         }
 
+        public static Vector2 ReflectionVector2(Vector2 incidentVelocity, Vector2 normal)
+        {
+            Vector2 normalNormalised = NormaliseVector(normal);
+            return incidentVelocity - 2 * DotProduct(incidentVelocity, normalNormalised) * normalNormalised;
+        }
+
         public static Vector2 ReflectionVector(Vector2 incidentVelocity, Vector2 normal)
         {
-            return incidentVelocity - 2 * DotProduct(incidentVelocity, normal) * normal;
+            float incidentVMag = VectorMagnitude(incidentVelocity);
+            float normalMag = VectorMagnitude(normal);
+
+            float dotProduct = incidentVelocity.X * (normal.X / normalMag) + incidentVelocity.Y * (normal.Y / normalMag);
+            return -2 * dotProduct * (normal / normalMag) + incidentVelocity;
         }
 
         public static List<Vector2> CalcCircleCollisionPoints(float radius, float minLength)

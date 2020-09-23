@@ -66,21 +66,22 @@ namespace WizardGrenade
             ResetAcceleration();
             UpdateRotation();
 
-            ResolveCollisions(gameTime, collisionMap);
+            ResolveCollisions(collisionMap);
 
             UpdateRotationOffset();
-            UpdateFriction();
+            //UpdateFriction();
         }
 
-        public void ResolveCollisions(GameTime gameTime, bool[,] collisionMap)
+        public void ResolveCollisions(bool[,] collisionMap)
         {
             List<Vector2> collidingPoints = CheckCollision(collisionMap, transformedPolyPoints);
 
             if (collidingPoints.Count > 0)
             {
                 isStable = true;
-                Vector2 reflection = MathsExt.ReflectionVector(velocity, CalculateResponseVector(collidingPoints, potential));
-                UpdateResponseVelocity(gameTime, reflection);
+                Vector2 response = CalculateResponseVector(collidingPoints, potential);
+                Vector2 reflection = MathsExt.ReflectionVector(velocity, response);
+                UpdateResponseVelocity(reflection);
                 UpdateCollisionPoints(position, rotation);
             }
             else
@@ -131,14 +132,14 @@ namespace WizardGrenade
         {
             Vector2 responseVector = Vector2.Zero;
             foreach (var point in collisionPoints)
-                responseVector += Vector2.Subtract(point, centre);
+                responseVector += Vector2.Subtract(centre, point);
 
             return responseVector;
         }
 
-        private void UpdateResponseVelocity(GameTime gameTime, Vector2 reflection)
+        private void UpdateResponseVelocity(Vector2 reflection)
         {
-            velocity = reflection * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            velocity = reflection;
         }
 
         private void UpdateRotation()
@@ -168,10 +169,8 @@ namespace WizardGrenade
         {
             velocity *= _friction;
 
-            if (velocity.X > 0 && velocity.X < 0.01f || velocity.X < 0 && velocity.X > -0.01f)
-                velocity.X = 0;
-            if (velocity.Y > 0 && velocity.Y < 0.01f || velocity.Y < 0 && velocity.Y > -0.01f)
-                velocity.Y = 0;
+            //if (MathsExt.VectorMagnitude(velocity) < 0.2f)
+            //    velocity = Vector2.Zero;
 
         }
 
