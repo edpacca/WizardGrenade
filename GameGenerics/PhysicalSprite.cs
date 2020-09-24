@@ -22,7 +22,7 @@ namespace WizardGrenade
         public bool isStable;
 
         private Vector2 _rotationOffset = Vector2.Zero;
-        private Vector2 potential = Vector2.Zero;
+        private Vector2 _potential = Vector2.Zero;
         private float _mass;
         private float _radius;
         private float _offsetRadius;
@@ -33,8 +33,7 @@ namespace WizardGrenade
 
         public PhysicalSprite(Vector2 initialPosition, float mass, float friction, bool canRotate, float minCollisionPolyPointDistance)
         {
-            position.X = initialPosition.X;
-            position.Y = initialPosition.Y;
+            position = initialPosition;
             _mass = mass;
             _canRotate = canRotate;
             _friction = friction;
@@ -44,14 +43,14 @@ namespace WizardGrenade
         public void LoadContent(ContentManager contentManager, string fileName, int frames)
         {
             _spriteTexture = contentManager.Load<Texture2D>(fileName);
-            size = new Rectangle(0, 0, _spriteTexture.Width / frames, _spriteTexture.Height);
+            _frames = frames;
+            size = new Rectangle(0, 0, _spriteTexture.Width / _frames, _spriteTexture.Height);
             relativeOrigin = new Vector2(size.Width / 2, size.Height / 2);
             _radius = Math.Max(size.Width, size.Height) / 2;
             _offsetRadius = (float)Math.Sqrt(2 * (_radius * _radius));
-            _frames = frames;
             polyPoints = _minCollisionPolyPointDistance == 0 ?
-                MathsExt.CalcRectangleCollisionPoints(size.Width, size.Height) :
-                MathsExt.CalcCircleCollisionPoints(_radius, _minCollisionPolyPointDistance);
+                Collision.CalcRectangleCollisionPoints(size.Width, size.Height) :
+                Collision.CalcCircleCollisionPoints(_radius, _minCollisionPolyPointDistance);
             LoadPolyContent(contentManager);
         }
 
@@ -61,7 +60,7 @@ namespace WizardGrenade
             UpdateVelocity(gameTime);
 
             UpdatePotentialPosition(gameTime);
-            UpdateCollisionPoints(potential, rotation);
+            UpdateCollisionPoints(_potential, rotation);
 
             ResetAcceleration();
             UpdateRotation();
@@ -69,19 +68,18 @@ namespace WizardGrenade
             ResolveCollisions(collisionMap);
 
             UpdateRotationOffset();
-            //UpdateFriction();
         }
 
         public void ResolveCollisions(bool[,] collisionMap)
         {
-            List<Vector2> collidingPoints = CheckCollision(collisionMap, transformedPolyPoints);
+            List<Vector2> collidingPoints = Collision.CheckCollision(collisionMap, transformedPolyPoints);
 
             if (collidingPoints.Count > 0)
             {
                 isStable = true;
-                Vector2 response = CalculateResponseVector(collidingPoints, potential);
-                Vector2 reflection = MathsExt.ReflectionVector(velocity, response);
-                UpdateResponseVelocity(reflection);
+                Vector2 response = Collision.CalculateResponseVector(collidingPoints, _potential);
+                Vector2 reflection = Mechanics.ReflectionVector(velocity, response);
+                UpdateResponseVelocity(ApplyDamping(reflection));
                 UpdateCollisionPoints(position, rotation);
             }
             else
@@ -90,27 +88,9 @@ namespace WizardGrenade
             }
         }
 
-        public List<Vector2> CheckCollision(bool[,] collisionMap, List<Vector2> collisionPoints)
-        {
-            var collidingPoints = new List<Vector2>();
-
-            foreach (var point in collisionPoints)
-            {
-                if (point.X >= 0 && point.Y >= 0 && 
-                    point.X < collisionMap.GetLength(0) - 1 && 
-                    point.Y < collisionMap.GetLength(1) - 1)
-                    if (collisionMap[(int)point.X, (int)point.Y] == true)
-                    {
-                        collidingPoints.Add(point);
-                    }
-            }
-
-            return collidingPoints;
-        }
-
         public void ApplyGravity()
         {
-            acceleration.Y += Physics.GRAVITY * _mass;
+            acceleration.Y += Mechanics.GRAVITY * _mass;
         }
 
         public void UpdateVelocity(GameTime gameTime)
@@ -120,21 +100,12 @@ namespace WizardGrenade
 
         private void UpdatePotentialPosition(GameTime gameTime)
         {
-            potential = position + velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _potential = position + velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         private void UpdateRealPosition()
         {
-            position = potential;
-        }
-
-        public Vector2 CalculateResponseVector(List<Vector2> collisionPoints, Vector2 centre)
-        {
-            Vector2 responseVector = Vector2.Zero;
-            foreach (var point in collisionPoints)
-                responseVector += Vector2.Subtract(centre, point);
-
-            return responseVector;
+            position = _potential;
         }
 
         private void UpdateResponseVelocity(Vector2 reflection)
@@ -165,9 +136,9 @@ namespace WizardGrenade
             isStable = false;
         }
 
-        private void UpdateFriction()
+        private Vector2 ApplyDamping(Vector2 vector)
         {
-            velocity *= _friction;
+            return vector *= _friction;
 
             //if (MathsExt.VectorMagnitude(velocity) < 0.2f)
             //    velocity = Vector2.Zero;

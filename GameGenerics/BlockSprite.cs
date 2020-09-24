@@ -32,7 +32,7 @@ namespace WizardGrenade
             size = new Rectangle(0, 0, _spriteTexture.Width, _spriteTexture.Height);
             relativeOrigin = new Vector2(_spriteTexture.Width / 2, _spriteTexture.Height / 2);
             _offsetLength = (float)Math.Sqrt(Math.Pow((_spriteTexture.Width / 2), 2) + Math.Pow((_spriteTexture.Height / 2), 2));
-            polyPoints = MathsExt.CalcRectangleCollisionPoints(_spriteTexture.Width, _spriteTexture.Height);
+            polyPoints = Collision.CalcRectangleCollisionPoints(_spriteTexture.Width, _spriteTexture.Height);
             LoadPolyContent(contentManager);
         }
 

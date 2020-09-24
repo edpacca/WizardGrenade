@@ -13,5 +13,10 @@ namespace WizardGrenade
 
             return false;
         }
+
+        public static int WrapAround(int i, int listLength)
+        {
+            return (i + 1) % listLength;
+        }
     }
 }

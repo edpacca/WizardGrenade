@@ -8,52 +8,52 @@ namespace WizardGrenade
 {
     class Collision
     {
-        public static bool PolyCollisionDectected(Polygon polyA, BlockSprite polyB)
+        public static Vector2 CalculateResponseVector(List<Vector2> collisionPoints, Vector2 centre)
         {
-            int verticesPolyA = polyA.transformedPolyPoints.Count;
-            int verticesPolyB = polyB.transformedPolyPoints.Count;
+            Vector2 responseVector = Vector2.Zero;
+            foreach (var point in collisionPoints)
+                responseVector += Vector2.Subtract(centre, point);
 
-            for (int i = 0; i < polyA.transformedPolyPoints.Count; i++)
+            return responseVector;
+        }
+
+        public static List<Vector2> CheckCollision(bool[,] collisionMap, List<Vector2> collisionPoints)
+        {
+            var collidingPoints = new List<Vector2>();
+
+            foreach (var point in collisionPoints)
             {
-                int i0 = MathsExt.WrapAround(i, verticesPolyA);
-                int i1 = MathsExt.WrapAround(i + 1, verticesPolyA);
-
-                for (int j = 0; j < polyB.transformedPolyPoints.Count; j++)
-                {
-                    int j0 = MathsExt.WrapAround(j, verticesPolyB);
-                    int j1 = MathsExt.WrapAround(j + 1, verticesPolyB);
-
-                    if (MathsExt.EdgeIntersection(
-                        polyA.transformedPolyPoints[i0],
-                        polyA.transformedPolyPoints[i1],
-                        polyB.transformedPolyPoints[j0], 
-                        polyB.transformedPolyPoints[j1]))
-                        return true;
-                }
+                if (point.X >= 0 && point.Y >= 0 &&
+                    point.X < collisionMap.GetLength(0) - 1 &&
+                    point.Y < collisionMap.GetLength(1) - 1)
+                    if (collisionMap[(int)point.X, (int)point.Y] == true)
+                        collidingPoints.Add(point);
             }
-            return false;
+            return collidingPoints;
         }
 
-        // Original system for rectangle/rectangle collisions
-        public static bool CollisionDetected(Sprite spriteA, Sprite spriteB)
+        public static List<Vector2> CalcCircleCollisionPoints(float radius, float minLength)
         {
-            Rectangle spriteARectangle = new Rectangle((int)spriteA.Position.X, (int)spriteA.Position.Y, spriteA.Size.Width, spriteA.Size.Height);
-            Rectangle spriteBRectangle = new Rectangle((int)spriteB.Position.X, (int)spriteB.Position.Y, spriteB.Size.Width, spriteB.Size.Height);
-            Rectangle intersectRectangle = Rectangle.Intersect(spriteARectangle, spriteBRectangle);
+            float minTheta = MathsExt.CalcMinTheta(radius, minLength);
+            List<Vector2> relativeCollisionPoints = new List<Vector2>();
 
-            if (intersectRectangle.IsEmpty)
-                return false;
+            for (float theta = 0; theta <= 2 * Math.PI; theta += minTheta)
+                relativeCollisionPoints.Add(Mechanics.VectorComponents(radius, theta));
 
-            return true;
+            return relativeCollisionPoints;
         }
 
-        public static Rectangle CollisionRectangle(Sprite spriteA, Sprite spriteB)
+        public static List<Vector2> CalcRectangleCollisionPoints(float width, float height)
         {
-            Rectangle rectangleA = new Rectangle((int)spriteA.Position.X, (int)spriteA.Position.Y, spriteA.Size.Width, spriteA.Size.Height);
-            Rectangle rectangleB = new Rectangle((int)spriteB.Position.X, (int)spriteB.Position.Y, spriteB.Size.Width, spriteB.Size.Height);
-            Rectangle intersection = Rectangle.Intersect(rectangleA, rectangleB);
-            return intersection;
-        }
+            List<Vector2> relativeCollisionPoints = new List<Vector2>
+            {
+                new Vector2(0 - width / 2, (0 - height / 2)),
+                new Vector2(0 + width / 2, (0 - height / 2)),
+                new Vector2(0 + width / 2, (0 + height / 2)),
+                new Vector2(0 - width / 2, (0 + height / 2))
+            };
 
+            return relativeCollisionPoints;
+        }
     }
 }

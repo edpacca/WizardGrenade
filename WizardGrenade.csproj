@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="GameObjects\Block.cs" />
     <Compile Include="GameImplementation\BlockSetter.cs" />
-    <Compile Include="GameImplementation\OldGameScreen.cs" />
     <Compile Include="GameObjects\Explosion.cs" />
     <Compile Include="GameObjects\Map.cs" />
     <Compile Include="GameUtilities\Collision.cs" />
@@ -54,17 +53,14 @@
     <Compile Include="GameGenerics\PhysicalSprite.cs" />
     <Compile Include="GameObjects\PlayerMarker.cs" />
     <Compile Include="GameUtilities\MathsExt.cs" />
-    <Compile Include="GameUtilities\Physics.cs" />
+    <Compile Include="GameUtilities\Mechanics.cs" />
     <Compile Include="GameGenerics\Animator.cs" />
     <Compile Include="GameGenerics\Polygon.cs" />
-    <Compile Include="GameImplementation\TeamOfPlayers.cs" />
     <Compile Include="GameGenerics\BlockSprite.cs" />
     <Compile Include="GameObjects\Tower.cs" />
     <Compile Include="GameUtilities\Utility.cs" />
     <Compile Include="GameObjects\Wizard.cs" />
     <Compile Include="WizardGrenadeGame.cs" />
-    <Compile Include="GameObjects\Grenade.cs" />
-    <Compile Include="GameObjects\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameGenerics\Sprite.cs" />

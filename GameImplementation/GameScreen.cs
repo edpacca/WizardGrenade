@@ -64,15 +64,6 @@ namespace WizardGrenade
             _previousKeyboardState = _currentKeyboardState;
         }
 
-        public void CheckForCollision(Polygon projectile, List<BlockSprite> polygons)
-        {
-            foreach (var polygon in polygons)
-            {
-                if (Collision.PolyCollisionDectected(projectile, polygon))
-                    projectile.OnCollision();
-            }
-        }
-
         public void Draw(SpriteBatch spriteBatch)
         {
             _map.Draw(spriteBatch);
