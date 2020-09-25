@@ -8,34 +8,39 @@ namespace WizardGrenade.GameObjects
     class Explosion : Sprite
     {
         private readonly string _fileName = "explosion";
-        public int _explosionRadius;
-        public bool _exploded;
+        public int explosionRadius;
+        public bool exploded;
+
+        public Explosion(int explosionSize)
+        {
+            explosionRadius = explosionSize;
+        }
 
         public void LoadContent(ContentManager contentManager)
         {
             LoadContent(contentManager, _fileName);
-            _explosionRadius = Size.Width / 2;
+            explosionRadius = Size.Width;
         }
 
         public void DrawExplosion(Vector2 explosionPosition)
         {
-            _exploded = true;
+            exploded = true;
             Position = explosionPosition;
         }
 
-        public void Explode()
+        public void Explode(Wizard wizard)
         {
-
+            Vector2 relativePosition =  wizard.position - Position;
+            if (Mechanics.VectorMagnitude(relativePosition) < explosionRadius * 2)
+                wizard.velocity += relativePosition * (300 / Mechanics.VectorMagnitude(relativePosition));
         }
-
-         
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (_exploded)
+            if (exploded)
             {
                 base.Draw(spriteBatch);
-                _exploded = false;
+                exploded = false;
             }
         }
     }

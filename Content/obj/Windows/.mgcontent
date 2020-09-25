@@ -15,17 +15,19 @@
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/fireball_single.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/healthFont.spritefont</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Map1.png</File>
+    <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Map2.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/MapSingleTerrain.png</File>
+    <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/MelfsAcidArrow.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/mouse.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/pixel.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/StatFont.spritefont</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/TowerSpritesheet.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Wizard_solo.png</File>
-    <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Wizard_spritesheet.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Wizard0.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Wizard1.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Wizard2.png</File>
     <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/Wizard3.png</File>
+    <File>C:/Users/eddie/OneDrive/ComputerScience/WizardGrenade/WizardGrenade/Content/WizardGrenade_spritesheet.png</File>
   </SourceFiles>
   <DestFiles>
     <File>block1.png</File>
@@ -35,6 +37,8 @@
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File>crosshair.png</File>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

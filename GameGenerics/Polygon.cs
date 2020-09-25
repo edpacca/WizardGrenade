@@ -32,7 +32,10 @@ namespace WizardGrenade
                 spriteBatch.Draw(_pixelTexture, point + position, pixelRectangle, Color.White);
 
             foreach (var point in transformedPolyPoints)
-                spriteBatch.Draw(_pixelTexture, point, pixelRectangle, Color.Aqua);
+            {
+               spriteBatch.Draw(_pixelTexture, point, pixelRectangle, Color.Aqua);
+            }
+
 
             // Draw position as 1 pixel dot
             spriteBatch.Draw(_pixelTexture, position, pixelRectangle, Color.Magenta);

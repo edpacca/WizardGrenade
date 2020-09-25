@@ -37,7 +37,7 @@ namespace WizardGrenade
             float minTheta = MathsExt.CalcMinTheta(radius, minLength);
             List<Vector2> relativeCollisionPoints = new List<Vector2>();
 
-            for (float theta = 0; theta <= 2 * Math.PI; theta += minTheta)
+            for (float theta = 0; theta <= 2 * Math.PI - minTheta; theta += minTheta)
                 relativeCollisionPoints.Add(Mechanics.VectorComponents(radius, theta));
 
             return relativeCollisionPoints;

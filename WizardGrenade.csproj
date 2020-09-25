@@ -41,6 +41,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GameImplementation\Team.cs" />
+    <Compile Include="GameObjects\Arrow.cs" />
     <Compile Include="GameObjects\Block.cs" />
     <Compile Include="GameImplementation\BlockSetter.cs" />
     <Compile Include="GameObjects\Explosion.cs" />

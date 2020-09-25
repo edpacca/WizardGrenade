@@ -19,7 +19,8 @@ namespace WizardGrenade
         public float rotation = 0f;
         public Vector2 velocity = new Vector2(0, 0);
         public Vector2 acceleration = new Vector2(0, 0);
-        public bool isStable;
+        public bool stable;
+        public bool collided;
 
         private Vector2 _rotationOffset = Vector2.Zero;
         private Vector2 _potential = Vector2.Zero;
@@ -64,26 +65,29 @@ namespace WizardGrenade
 
             ResetAcceleration();
             UpdateRotation();
-
-            ResolveCollisions(collisionMap);
+            ResolveCollisions(collisionMap, gameTime);
 
             UpdateRotationOffset();
         }
 
-        public void ResolveCollisions(bool[,] collisionMap)
+        public void ResolveCollisions(bool[,] collisionMap, GameTime gameTime)
         {
             List<Vector2> collidingPoints = Collision.CheckCollision(collisionMap, transformedPolyPoints);
-
             if (collidingPoints.Count > 0)
             {
-                isStable = true;
+                collided = true;
+                stable = true;
                 Vector2 response = Collision.CalculateResponseVector(collidingPoints, _potential);
                 Vector2 reflection = Mechanics.ReflectionVector(velocity, response);
-                UpdateResponseVelocity(ApplyDamping(reflection));
+                UpdateResponseVelocity(ApplyDamping(reflection), gameTime);
                 UpdateCollisionPoints(position, rotation);
+                if (Collision.CheckCollision(collisionMap, transformedPolyPoints).Count != 0)
+                    UpdateResponseVelocity(reflection, gameTime);
             }
             else
             {
+                collided = false;
+                stable = false;
                 UpdateRealPosition();
             }
         }
@@ -96,6 +100,10 @@ namespace WizardGrenade
         public void UpdateVelocity(GameTime gameTime)
         {
             velocity += acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (velocity == Vector2.Zero)
+                stable = true;
+            else
+                stable = false;
         }
 
         private void UpdatePotentialPosition(GameTime gameTime)
@@ -108,9 +116,10 @@ namespace WizardGrenade
             position = _potential;
         }
 
-        private void UpdateResponseVelocity(Vector2 reflection)
+        private void UpdateResponseVelocity(Vector2 reflection, GameTime gameTime)
         {
             velocity = reflection;
+            position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         private void UpdateRotation()
@@ -133,16 +142,15 @@ namespace WizardGrenade
         private void ResetAcceleration()
         {
             acceleration = Vector2.Zero;
-            isStable = false;
         }
 
         private Vector2 ApplyDamping(Vector2 vector)
         {
-            return vector *= _friction;
-
-            //if (MathsExt.VectorMagnitude(velocity) < 0.2f)
-            //    velocity = Vector2.Zero;
-
+            Vector2 dampedVelocity = vector *= _friction;
+            //return vector;
+            if (Mechanics.VectorMagnitude(dampedVelocity) < 16f)
+                return Vector2.Zero;
+            else return dampedVelocity;
         }
 
         public int SpriteFrameWidth()
@@ -160,7 +168,7 @@ namespace WizardGrenade
             spriteBatch.Draw(_spriteTexture, position + _rotationOffset,
                 size, Color.White, rotation, Vector2.Zero, 1, spriteEffect, layerDepth);
 
-            DrawCollisionPoints(spriteBatch, position);
+            //DrawCollisionPoints(spriteBatch, position);
         }
     }
 }

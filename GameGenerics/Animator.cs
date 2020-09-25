@@ -24,7 +24,7 @@ namespace WizardGrenade
 
         public int GetSingleFrame(string state)
         {
-            return _animationStates[state][0];
+            return GetFramePosition(_animationStates[state][0]);
         }
 
         public int GetFramePosition(int currentFrame)
