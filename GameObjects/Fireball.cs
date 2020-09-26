@@ -34,7 +34,7 @@ namespace WizardGrenade
             //if (Vector2.Distance(_initialPosition, position) > MAX_DISTANCE)
             //    inMotion = false;
 
-            if (_fuseTimer > _fuse || collided)
+            if (_fuseTimer > _fuse)
             {
                 explosion.DrawExplosion(position);
                 inMotion = false;

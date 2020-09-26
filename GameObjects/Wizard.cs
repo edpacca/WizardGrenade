@@ -97,7 +97,7 @@ namespace WizardGrenade
             _crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, position, _directionCoefficient);
 
             ChargeFireball(gameTime);
-            FireArrow(gameTime);
+            FireArrow();
 
             foreach (var fireball in _fireballs)
             {
@@ -106,7 +106,7 @@ namespace WizardGrenade
 
             foreach (var arrow in _arrows)
             {
-                arrow.Update(gameTime, _collisionMap);
+                arrow.Update(gameTime);
             }
 
             _previousKeyboardState = _currentKeyboardState;
@@ -131,6 +131,15 @@ namespace WizardGrenade
                 }
             }
         }
+
+        public void CheckArrowCollisions(Wizard wizard)
+        {
+            foreach (var arrow in _arrows)
+            {
+                arrow.CheckArrowCollision(wizard);
+            }
+        }
+
 
         private void Walking(Direction direction, SpriteEffects effect, int directionCoefficient, GameTime gameTime)
         {
@@ -160,7 +169,15 @@ namespace WizardGrenade
                 velocity.Y += 200 * (float)(Math.Cos(_crosshair.crosshairAngle));
                 velocity.X += 40 * (float)(Math.Sin(_crosshair.crosshairAngle));
             }
-            
+        }
+
+        public Fireball CheckFireballCollisions()
+        {
+            foreach (var fireball in _fireballs)
+                if (fireball.explosion.exploded)
+                    return fireball;
+
+            return null;
         }
 
         private void ChargeFireball(GameTime gameTime)
@@ -184,7 +201,7 @@ namespace WizardGrenade
             }
         }
 
-        private void FireArrow(GameTime gameTime)
+        private void FireArrow()
         {
             if (Utility.KeysReleased(_currentKeyboardState, _previousKeyboardState, Keys.LeftAlt))
             {

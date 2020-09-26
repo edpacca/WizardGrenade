@@ -25,7 +25,7 @@ namespace WizardGrenade
         private Vector2 _rotationOffset = Vector2.Zero;
         private Vector2 _potential = Vector2.Zero;
         private float _mass;
-        private float _radius;
+        public float _radius;
         private float _offsetRadius;
         private float _friction;
         private bool _canRotate;

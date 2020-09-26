@@ -75,5 +75,15 @@ namespace WizardGrenade.GameUtilities
 
             return new Vector2(x, y);
         }
+
+        public static bool isPointWithinCircle(Vector2 testPosition, Vector2 circleCentre, float circleRadius)
+        {
+            Vector2 deltaRadius = testPosition - circleCentre;
+            float deltaMagnitude = (float)Math.Pow(Mechanics.VectorMagnitude(deltaRadius), 2);
+            if (deltaMagnitude <= Math.Pow(circleRadius, 2))
+                return true;
+
+            return false;
+        }
     }
 }

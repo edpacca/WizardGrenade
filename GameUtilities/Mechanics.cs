@@ -42,11 +42,10 @@ namespace WizardGrenade
 
         public static Vector2 RelativeProjectilePosition(Vector2 vectorComponents, GameTime gameTime, TimeSpan startTime, float mass)
         {
-            float deltaX = vectorComponents.X * (float)(gameTime.TotalGameTime.TotalSeconds - startTime.TotalSeconds);
-            float deltaY = (vectorComponents.Y * (float)(gameTime.TotalGameTime.TotalSeconds - startTime.TotalSeconds)
-                + (GRAVITY * mass / 2 * (float)Math.Pow((float)(gameTime.TotalGameTime.TotalSeconds - startTime.TotalSeconds), 2)));
+            Vector2 delta = vectorComponents * (float)(gameTime.TotalGameTime.TotalSeconds - startTime.TotalSeconds);
+            delta.Y += GRAVITY * mass / 2 * (float)Math.Pow((float)(gameTime.TotalGameTime.TotalSeconds - startTime.TotalSeconds), 2);
 
-            return new Vector2(deltaX, deltaY);
+            return delta;
         }
     }
 }

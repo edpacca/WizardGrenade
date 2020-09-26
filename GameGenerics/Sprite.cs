@@ -10,6 +10,8 @@ namespace WizardGrenade
         public Vector2 Position = new Vector2(0, 0);
         public Vector2 Origin;
         public Rectangle Size;
+        public Vector2 RotationOffset;
+        public float Rotation = 0f;
         public float Scale = 1;
         private Texture2D _spriteTexture;
         
@@ -20,16 +22,16 @@ namespace WizardGrenade
             Origin = new Vector2(_spriteTexture.Width / 2, _spriteTexture.Height / 2);
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+        public void UpdateRotationOffset()
         {
-            spriteBatch.Draw(_spriteTexture, Position - (Origin * Scale),
-                Size, Color.White, 0.0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            RotationOffset.X = -_spriteTexture.Width / 2 * (float)Math.Cos(Rotation) + (_spriteTexture.Height / 2 * (float)Math.Sin(Rotation));
+            RotationOffset.Y = -_spriteTexture.Height / 2 * (float)Math.Cos(Rotation) - (_spriteTexture.Width / 2 * (float)Math.Sin(Rotation));
         }
 
-        public virtual void DrawHit(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_spriteTexture, Position,
-                Size, Color.DarkRed, 0.0f, Vector2.Zero, 1, SpriteEffects.None, 0);
+            spriteBatch.Draw(_spriteTexture, Position + RotationOffset,
+                Size, Color.White, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
 
         public Vector2 CalculateOrigin(Vector2 position) => new Vector2(position.X + Origin.X, position.Y + Origin.Y);
