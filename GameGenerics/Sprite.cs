@@ -30,7 +30,7 @@ namespace WizardGrenade
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_spriteTexture, Position + RotationOffset,
+            spriteBatch.Draw(_spriteTexture, Position + RotationOffset - Origin,
                 Size, Color.White, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
 

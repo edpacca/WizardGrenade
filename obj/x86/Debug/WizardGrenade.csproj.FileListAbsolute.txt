@@ -157,3 +157,6 @@ C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bi
 C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\System.ValueTuple.dll
 C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\System.ValueTuple.xml
 C:\Users\eddie\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\TestMap2.xnb
+C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\Content\TestMap2.xnb
+C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\System.ValueTuple.dll
+C:\Users\eddie\Documents\OneDrive\ComputerScience\WizardGrenade\WizardGrenade\bin\Windows\x86\Debug\System.ValueTuple.xml

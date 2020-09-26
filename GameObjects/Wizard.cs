@@ -13,6 +13,7 @@ namespace WizardGrenade
     {
         private readonly string _fileName = "WizardGrenade_spritesheet";
         public List<Fireball> _fireballs = new List<Fireball>();
+        public bool activePlayer;
         public List<Arrow> _arrows = new List<Arrow>();
         private Crosshair _crosshair = new Crosshair();
         private ContentManager _contentManager;
@@ -86,28 +87,32 @@ namespace WizardGrenade
         {
             _currentKeyboardState = Keyboard.GetState();
 
-            if (_State != ActiveState.Charging)
+            if (activePlayer)
             {
-                UpdateMovement(_currentKeyboardState, gameTime);
-                if (_State != ActiveState.Walking && _State != ActiveState.Jumping)
-                    Jump();
+                if (_State != ActiveState.Charging)
+                {
+                    UpdateMovement(_currentKeyboardState, gameTime);
+                    if (_State != ActiveState.Walking && _State != ActiveState.Jumping)
+                        Jump();
+                }
+
+                _crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, position, _directionCoefficient);
+
+                ChargeFireball(gameTime);
+                FireArrow();
+
+                foreach (var fireball in _fireballs)
+                {
+                    fireball.Update(gameTime, _collisionMap);
+                }
+
+                foreach (var arrow in _arrows)
+                {
+                    arrow.Update(gameTime);
+                }
             }
+
             base.Update(gameTime, _collisionMap);
-
-            _crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, position, _directionCoefficient);
-
-            ChargeFireball(gameTime);
-            FireArrow();
-
-            foreach (var fireball in _fireballs)
-            {
-                fireball.Update(gameTime, _collisionMap);
-            }
-
-            foreach (var arrow in _arrows)
-            {
-                arrow.Update(gameTime);
-            }
 
             _previousKeyboardState = _currentKeyboardState;
         }
@@ -228,16 +233,20 @@ namespace WizardGrenade
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
-            _crosshair.Draw(spriteBatch);
+            if (activePlayer)
+            {
+                _crosshair.Draw(spriteBatch);
 
-            spriteBatch.DrawString(_font, "power: " + _fireballSpeed.ToString("0"),
-                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 100), Color.Yellow);
-            spriteBatch.DrawString(_font, "State: " + _State,
-                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 80), Color.Yellow);
-            spriteBatch.DrawString(_font, "Stable: " + stable,
-                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 60), Color.Yellow);
-            spriteBatch.DrawString(_font, "Velicty: " + velocity.X.ToString("0.0") + ", " + velocity.Y.ToString("0.0"),
-                new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 40), Color.Yellow);
+                spriteBatch.DrawString(_font, "power: " + _fireballSpeed.ToString("0"),
+                    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 100), Color.Yellow);
+                spriteBatch.DrawString(_font, "State: " + _State,
+                    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 80), Color.Yellow);
+                spriteBatch.DrawString(_font, "Stable: " + stable,
+                    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 60), Color.Yellow);
+                spriteBatch.DrawString(_font, "Velicty: " + velocity.X.ToString("0.0") + ", " + velocity.Y.ToString("0.0"),
+                    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 40), Color.Yellow);
+            }
+
 
             foreach (var fireball in _fireballs)
             {

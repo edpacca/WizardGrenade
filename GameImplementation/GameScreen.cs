@@ -3,14 +3,14 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using WizardGrenade.GameImplementation;
 using WizardGrenade.GameObjects;
 
 namespace WizardGrenade
 {
     class GameScreen
     {
-        private Wizard _wizard;
-        private Wizard _testWizard;
+        private Team _team;
         private Sprite _mouse;
         private Map _map;
 
@@ -21,21 +21,21 @@ namespace WizardGrenade
 
         public void Initialize()
         {
-            _wizard = new Wizard(WizardGrenadeGame.SCREEN_WIDTH / 2 - 300, WizardGrenadeGame.SCREEN_HEIGHT / 2 - 250);
-            _testWizard = new Wizard(WizardGrenadeGame.SCREEN_WIDTH / 2 + 300, WizardGrenadeGame.SCREEN_HEIGHT / 2 - 250);
             _mouse = new Sprite();
             _map = new Map();
+            _team = new Team(3);
         }
 
         public void LoadContent (ContentManager contentManager)
         {
             _currentKeyboardState = Keyboard.GetState();
             _map.LoadContent(contentManager);
-            _wizard.LoadContent(contentManager);
-            _testWizard.LoadContent(contentManager);
             _mouse.LoadContent(contentManager, "mouse");
-            _wizard.GetCollisionMap(_map.GetPixelCollisionData());
-            _testWizard.GetCollisionMap(_map.GetPixelCollisionData());
+            _team.LoadContent(contentManager);
+            foreach (var wizard in _team.wizards)
+            {
+                wizard.GetCollisionMap(_map.GetPixelCollisionData());
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -46,22 +46,47 @@ namespace WizardGrenade
             _mouse.Position.X = _currentMouseState.X - 2.5f;
             _mouse.Position.Y = _currentMouseState.Y - 2.5f;
 
-            _wizard.Update(gameTime);
-            _testWizard.Update(gameTime);
-            CheckWizardCollisions(_wizard);
-            CheckWizardCollisions(_testWizard);
 
-            _wizard.CheckArrowCollisions(_testWizard);
+
+            _team.Update(gameTime);
+
+            CheckWizardCollisions(_team.wizards);
+
 
             _previousKeyboardState = _currentKeyboardState;
         }
 
-        public void CheckWizardCollisions(Wizard wizard)
+        public void CheckWizardCollisions(List<Wizard> wizards)
         {
-            Fireball fireball = wizard.CheckFireballCollisions();
-            if (fireball != null)
+            foreach (var wizard in wizards)
             {
-                _map.DeformLevel(fireball.explosion.explosionRadius, fireball.position);
+                Fireball fireball = wizard.CheckFireballCollisions();
+                if (fireball != null)
+                {
+                    _map.DeformLevel(fireball.explosion.explosionRadius, fireball.position);
+                    ExplosionKnockBack(wizards, fireball);
+                }
+
+                if (wizard.activePlayer)
+                    CheckArrowHits(wizards, wizard);
+            }
+        }
+
+
+
+        public void CheckArrowHits(List<Wizard> wizards, Wizard activeWizard)
+        {
+            foreach (var wizard in wizards)
+            {
+                if (!wizard.activePlayer)
+                    activeWizard.CheckArrowCollisions(wizard);
+            }
+        }
+
+        public void ExplosionKnockBack(List<Wizard> wizards, Fireball fireball)
+        {
+            foreach (var wizard in wizards)
+            {
                 fireball.explosion.Explode(wizard);
             }
         }
@@ -69,8 +94,7 @@ namespace WizardGrenade
         public void Draw(SpriteBatch spriteBatch)
         {
             _map.Draw(spriteBatch);
-            _wizard.Draw(spriteBatch);
-            _testWizard.Draw(spriteBatch);
+            _team.Draw(spriteBatch);
             _mouse.Draw(spriteBatch);
         }
     }

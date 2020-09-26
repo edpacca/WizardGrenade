@@ -19,8 +19,9 @@ namespace WizardGrenade
 
         public void UpdateMarker(GameTime gameTime, Vector2 activePlayerPosition)
         {
-            Position.X = activePlayerPosition.X + 8;
-            Position.Y += (float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds) * 0.08);
+            Position.X = activePlayerPosition.X;
+            Position.Y = activePlayerPosition.Y - 35;
+            Position.Y += (float)(Math.Sin(gameTime.TotalGameTime.TotalSeconds)) * 4;
         }
 
         public override void Draw(SpriteBatch spriteBatch)

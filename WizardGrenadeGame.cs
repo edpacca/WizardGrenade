@@ -69,7 +69,7 @@ namespace WizardGrenade
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkOliveGreen);
+            GraphicsDevice.Clear(Color.SlateGray);
 
             _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, Scale);
             gameScreen.Draw(_spriteBatch);
