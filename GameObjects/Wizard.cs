@@ -12,9 +12,11 @@ namespace WizardGrenade
     class Wizard : PhysicalSprite
     {
         private readonly string _fileName = "WizardGrenade_spritesheet";
+
         public List<Fireball> _fireballs = new List<Fireball>();
         public bool activePlayer;
         public List<Arrow> _arrows = new List<Arrow>();
+
         private Crosshair _crosshair = new Crosshair();
         private ContentManager _contentManager;
         private SpriteFont _font;
@@ -23,15 +25,18 @@ namespace WizardGrenade
         private const int POWER_COEFFICIENT = 400;
         private const int MAX_THROW_POWER = 750;
         private const int PLAYER_SPEED = 100;
-        private const float FRICTION = 0.2f;
+        private const float FRICTION = 0.4f;
         private const float MASS = 100;
         private const int _frames = 15;
-        private const float _minCollisionPolyPointDistance = 7;
+        private const float _minCollisionPolyPointDistance = 3;
         private const bool _canRotate = false;
 
+        private int _health;
         private float _fireballSpeed;
         private int _directionCoefficient = 1;
         private bool[,] _collisionMap;
+        private bool _dead;
+        private bool _offMap;
 
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
@@ -48,8 +53,11 @@ namespace WizardGrenade
             ["Jump"] = new int[] { 13 },
         };
 
-        public Wizard(int startX, int startY) : 
-            base(new Vector2(startX, startY), MASS, FRICTION, _canRotate, _minCollisionPolyPointDistance){}
+        public Wizard(int startX, int startY, int startHealth) : 
+            base(new Vector2(startX, startY), MASS, FRICTION, _canRotate, _minCollisionPolyPointDistance)
+        {
+            _health = startHealth;
+        }
 
         public void GetCollisionMap(bool[,] collisionMap)
         {
@@ -87,34 +95,39 @@ namespace WizardGrenade
         {
             _currentKeyboardState = Keyboard.GetState();
 
-            if (activePlayer)
-            {
-                if (_State != ActiveState.Charging)
-                {
-                    UpdateMovement(_currentKeyboardState, gameTime);
-                    if (_State != ActiveState.Walking && _State != ActiveState.Jumping)
-                        Jump();
-                }
+            CheckForDead();
 
-                _crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, position, _directionCoefficient);
-
-                ChargeFireball(gameTime);
-                FireArrow();
-
-                foreach (var fireball in _fireballs)
-                {
-                    fireball.Update(gameTime, _collisionMap);
-                }
-
-                foreach (var arrow in _arrows)
-                {
-                    arrow.Update(gameTime);
-                }
-            }
-
-            base.Update(gameTime, _collisionMap);
+            if (activePlayer && !_dead)
+                ControlWizard(gameTime);
+            if (!_offMap)
+                base.Update(gameTime, _collisionMap);
 
             _previousKeyboardState = _currentKeyboardState;
+        }
+
+        private void ControlWizard(GameTime gameTime)
+        {
+            if (_State != ActiveState.Charging)
+            {
+                UpdateMovement(_currentKeyboardState, gameTime);
+
+                if (_State != ActiveState.Walking && _State != ActiveState.Jumping)
+                    Jump();
+            }
+
+            _crosshair.UpdateCrosshair(gameTime, _currentKeyboardState, position, _directionCoefficient);
+            ChargeFireball(gameTime);
+            FireArrow();
+
+            foreach (var fireball in _fireballs)
+            {
+                fireball.Update(gameTime, _collisionMap);
+            }
+
+            foreach (var arrow in _arrows)
+            {
+                arrow.Update(gameTime);
+            }
         }
 
         private void UpdateMovement(KeyboardState currentKeyboardState, GameTime gameTime)
@@ -144,7 +157,6 @@ namespace WizardGrenade
                 arrow.CheckArrowCollision(wizard);
             }
         }
-
 
         private void Walking(Direction direction, SpriteEffects effect, int directionCoefficient, GameTime gameTime)
         {
@@ -230,6 +242,40 @@ namespace WizardGrenade
             _fireballs.Add(fireball);
         }
 
+        public void UpdateHealth(int damage)
+        {
+            _health -= damage;
+        }
+
+        public bool GetDead()
+        {
+            return _dead;
+        }
+
+        public int GetHealth()
+        {
+            return _health;
+        }
+
+        public void CheckForDead()
+        {
+            if (position.Y > WizardGrenadeGame.SCREEN_HEIGHT)
+            {
+                _health = 0;
+
+                if (position.Y > WizardGrenadeGame.SCREEN_HEIGHT + 200)
+                    _offMap = true;
+            }
+
+
+            if (_health <= 0)
+            {
+                _health = 0;
+                _dead = true;
+                rotation = (float)Math.PI / 2;
+            }
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
@@ -246,7 +292,10 @@ namespace WizardGrenade
                 spriteBatch.DrawString(_font, "Velicty: " + velocity.X.ToString("0.0") + ", " + velocity.Y.ToString("0.0"),
                     new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 40), Color.Yellow);
             }
-
+            else if (!_dead)
+            {
+                spriteBatch.DrawString(_font, _health.ToString(), new Vector2(position.X - 9, position.Y - 33), Color.White);
+            }
 
             foreach (var fireball in _fireballs)
             {

@@ -73,6 +73,7 @@ namespace WizardGrenade
         public void ResolveCollisions(bool[,] collisionMap, GameTime gameTime)
         {
             List<Vector2> collidingPoints = Collision.CheckCollision(collisionMap, transformedPolyPoints);
+
             if (collidingPoints.Count > 0)
             {
                 collided = true;
@@ -100,6 +101,7 @@ namespace WizardGrenade
         public void UpdateVelocity(GameTime gameTime)
         {
             velocity += acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             if (velocity == Vector2.Zero)
                 stable = true;
             else
@@ -147,7 +149,7 @@ namespace WizardGrenade
         private Vector2 ApplyDamping(Vector2 vector)
         {
             Vector2 dampedVelocity = vector *= _friction;
-            //return vector;
+
             if (Mechanics.VectorMagnitude(dampedVelocity) < 16f)
                 return Vector2.Zero;
             else return dampedVelocity;

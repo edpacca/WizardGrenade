@@ -10,6 +10,7 @@ namespace WizardGrenade.GameObjects
     {
         private readonly string _fileName = "MelfsAcidArrow";
         private const float ArrowSpeed = 750;
+        private bool _collided;
         private Vector2 velocity = Vector2.Zero;
         private Vector2 collisionPoint;
 
@@ -27,9 +28,10 @@ namespace WizardGrenade.GameObjects
 
         public void Update(GameTime gameTime)
         {
-            Position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            Rotation = (float)(Math.Atan2(velocity.Y, velocity.X));
-            UpdateRotationOffset();
+            if (!_collided)
+                Position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Rotation = (float)(Math.Atan2(velocity.Y, velocity.X));
+                UpdateRotationOffset();
         }
 
         public bool CheckArrowCollision(Wizard wizard)
@@ -37,6 +39,9 @@ namespace WizardGrenade.GameObjects
             if (MathsExt.isPointWithinCircle(Position + collisionPoint + RotationOffset, wizard.position, wizard._radius))
             {
                 wizard.velocity += velocity;
+                InteractionManager.Damage(wizard, 15);
+                velocity = Vector2.Zero;
+                _collided = true;
                 return true;
             }
 
@@ -45,7 +50,8 @@ namespace WizardGrenade.GameObjects
 
         public override void Draw (SpriteBatch spriteBatch)
         {
-            base.Draw(spriteBatch);
+            if (!_collided)
+                base.Draw(spriteBatch);
         }
     }
 }

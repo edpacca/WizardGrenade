@@ -15,8 +15,8 @@ namespace WizardGrenade.GameObjects
 
         public void LoadContent(ContentManager contentManager)
         {
-            //_mapTexture = contentManager.Load<Texture2D>("Map2");
-            _mapTexture = contentManager.Load<Texture2D>("TestMap2");
+            _mapTexture = contentManager.Load<Texture2D>("Map2");
+            //_mapTexture = contentManager.Load<Texture2D>("TestMap2");
 
             _mapPixelData = new uint[_mapTexture.Width * _mapTexture.Height];
             _mapTexture.GetData(_mapPixelData, 0, _mapTexture.Width * _mapTexture.Height);

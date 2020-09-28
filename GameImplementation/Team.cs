@@ -17,16 +17,21 @@ namespace WizardGrenade.GameImplementation
         private PlayerMarker _marker = new PlayerMarker();
         public int activeWizard = 0;
         private int _teamSize;
+        private int _teamHealth;
+        private SpriteFont _teamFont;
+        private HealthBar _healthBar;
 
         private KeyboardState _currentKeyboardState;
         private KeyboardState _previousKeyboardState;
 
-        public Team(int teamSize)
+        public Team(int teamSize, int startHealth)
         {
             _teamSize = teamSize;
+            _teamHealth = _teamSize * startHealth;
+            _healthBar = new HealthBar(_teamHealth);
             for (int i = 0; i < _teamSize; i++)
             {
-                wizards.Add(new Wizard(i * 100 + 100, 100));
+                wizards.Add(new Wizard(i * 300 + 200, 100, startHealth));
             }
         }
 
@@ -37,6 +42,8 @@ namespace WizardGrenade.GameImplementation
                 wizard.LoadContent(contentManager);
             }
             _marker.LoadContent(contentManager, wizards[activeWizard].position);
+            _healthBar.LoadContent(contentManager);
+            _teamFont = contentManager.Load<SpriteFont>("StatFont");
         }
 
         public void Update(GameTime gameTime)
@@ -45,7 +52,7 @@ namespace WizardGrenade.GameImplementation
 
             ChangePlayer(Keys.Tab);
             _marker.UpdateMarker(gameTime, wizards[activeWizard].position);
-
+            _healthBar.UpdateHealthBar(gameTime, _teamHealth);
             foreach (var wizard in wizards)
             {
                 wizard.Update(gameTime);
@@ -60,8 +67,29 @@ namespace WizardGrenade.GameImplementation
 
         public void ChangePlayer(Keys key)
         {
-            if (Utility.KeysReleased(_currentKeyboardState, _previousKeyboardState, key))
+            if (wizards[activeWizard].GetDead())
                 activeWizard = Utility.WrapAround(activeWizard, _teamSize);
+
+            if (Utility.KeysReleased(_currentKeyboardState, _previousKeyboardState, key))
+            {
+                activeWizard = Utility.WrapAround(activeWizard, _teamSize);
+                if (wizards[activeWizard].GetDead())
+                    activeWizard = Utility.WrapAround(activeWizard, _teamSize);
+            }
+        }
+
+        public void UpdateTeamHealth(GameTime gameTime)
+        {
+            int newTeamHealth = 0;
+            foreach (var wizard in wizards)
+            {
+                newTeamHealth += wizard.GetHealth();
+            }
+
+            if (_teamHealth > newTeamHealth)
+            {
+                _teamHealth -= (int)(gameTime.ElapsedGameTime.TotalSeconds * 100);
+            }
         }
 
 
@@ -74,6 +102,11 @@ namespace WizardGrenade.GameImplementation
             {
                 wizard.Draw(spriteBatch);
             }
+
+            //spriteBatch.DrawString(_teamFont, _teamHealth.ToString(), 
+            //    new Vector2(WizardGrenadeGame.SCREEN_WIDTH / 2, WizardGrenadeGame.SCREEN_HEIGHT - 40), Color.White);
+
+            _healthBar.Draw(spriteBatch);
         }
     }
 }

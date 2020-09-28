@@ -40,7 +40,7 @@ namespace WizardGrenade
             if (_currentFrameIndex >= numberOfFrames)
                 _currentFrameIndex = 0;
 
-            if (elapsedFrameTime < (float)(1 / targetFrameRate))
+            if (elapsedFrameTime < (1 / targetFrameRate))
                 return _animationStates[state][_currentFrameIndex];
             else
             {
@@ -58,7 +58,7 @@ namespace WizardGrenade
             if (_currentFrameIndex >= numberOfFrames)
                 _currentFrameIndex = 0;
 
-            if (elapsedFrameTime < (float)(1 / targetFrameRate))
+            if (elapsedFrameTime < (1 / targetFrameRate))
                 return _animationStates[state][_currentFrameIndex];
             else
             {

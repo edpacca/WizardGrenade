@@ -23,7 +23,7 @@ namespace WizardGrenade
         {
             _mouse = new Sprite();
             _map = new Map();
-            _team = new Team(3);
+            _team = new Team(3, 100);
         }
 
         public void LoadContent (ContentManager contentManager)
@@ -36,6 +36,8 @@ namespace WizardGrenade
             {
                 wizard.GetCollisionMap(_map.GetPixelCollisionData());
             }
+
+
         }
 
         public void Update(GameTime gameTime)
@@ -47,8 +49,8 @@ namespace WizardGrenade
             _mouse.Position.Y = _currentMouseState.Y - 2.5f;
 
 
-
             _team.Update(gameTime);
+            _team.UpdateTeamHealth(gameTime);
 
             CheckWizardCollisions(_team.wizards);
 
@@ -72,8 +74,6 @@ namespace WizardGrenade
             }
         }
 
-
-
         public void CheckArrowHits(List<Wizard> wizards, Wizard activeWizard)
         {
             foreach (var wizard in wizards)
@@ -87,7 +87,7 @@ namespace WizardGrenade
         {
             foreach (var wizard in wizards)
             {
-                fireball.explosion.Explode(wizard);
+                InteractionManager.FireballExplosion(wizard, fireball.explosion);
             }
         }
 
