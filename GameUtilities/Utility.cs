@@ -21,27 +21,27 @@ namespace WizardGrenade
 
         public static float GetHorizontalCentre(int objectWidth)
         {
-            return (WizardGrenadeGame.SCREEN_WIDTH - objectWidth) / 2;
+            return (WizardGrenadeGame.GetScreenWidth() - objectWidth) / 2;
         }
 
         public static float GetVerticalCentre(int objectHeight)
         {
-            return (WizardGrenadeGame.SCREEN_HEIGHT - objectHeight) / 2;
+            return (WizardGrenadeGame.GetScreenHeight() - objectHeight) / 2;
         }
 
         public static int ScreenWidth()
         {
-            return WizardGrenadeGame.SCREEN_WIDTH;
+            return WizardGrenadeGame.GetScreenWidth();
         }
 
         public static int ScreenHeight()
         {
-            return WizardGrenadeGame.SCREEN_HEIGHT;
+            return WizardGrenadeGame.GetScreenHeight();
         }
 
         public static Vector2 GetCentre()
         {
-            return new Vector2(WizardGrenadeGame.SCREEN_WIDTH / 2, WizardGrenadeGame.SCREEN_HEIGHT / 2);
+            return new Vector2(WizardGrenadeGame.GetScreenWidth() / 2, WizardGrenadeGame.GetScreenHeight() / 2);
         }
     }
 }

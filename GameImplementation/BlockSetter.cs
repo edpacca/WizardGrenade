@@ -136,7 +136,7 @@ namespace WizardGrenade
 
             if (settingBlocks)
             {
-                spriteBatch.DrawString(_blockFont, "SET BLOCKS", new Vector2(WizardGrenadeGame.SCREEN_WIDTH / 2 - 70, 20), _fontColour);
+                spriteBatch.DrawString(_blockFont, "SET BLOCKS", new Vector2(Utility.GetHorizontalCentre(140), 20), _fontColour);
 
                 var pos = 10;
                 var diff = 10;

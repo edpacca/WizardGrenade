@@ -14,13 +14,14 @@ namespace WizardGrenade
         private readonly string _fileName = "WizardGrenade_spritesheet";
 
         public List<Fireball> _fireballs = new List<Fireball>();
-        public bool activePlayer;
         public List<Arrow> _arrows = new List<Arrow>();
+        public bool activePlayer;
 
         private Crosshair _crosshair = new Crosshair();
         private ContentManager _contentManager;
         private SpriteFont _font;
         private Animator _animator;
+        private float animationTimer = 0;
 
         private const int POWER_COEFFICIENT = 400;
         private const int MAX_THROW_POWER = 750;
@@ -140,7 +141,16 @@ namespace WizardGrenade
 
             else
             {
-                UpdateAnimationRectangle(_animator.GetSingleFrame("Idle"));
+                animationTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                if (animationTimer > 5)
+                {
+                    UpdateAnimationRectangle(_animator.GetAnimationFrames("Idle", 4f, gameTime));
+                    if (animationTimer > 6)
+                        animationTimer = 0;
+                }
+                else
+                    UpdateAnimationRectangle(_animator.GetSingleFrame("Idle"));
 
                 if (velocity == Vector2.Zero)
                 {
@@ -259,11 +269,11 @@ namespace WizardGrenade
 
         public void CheckForDead()
         {
-            if (position.Y > WizardGrenadeGame.SCREEN_HEIGHT)
+            if (position.Y > Utility.ScreenHeight())
             {
                 _health = 0;
 
-                if (position.Y > WizardGrenadeGame.SCREEN_HEIGHT + 200)
+                if (position.Y > Utility.ScreenHeight() + 200)
                     _offMap = true;
             }
 
@@ -284,13 +294,13 @@ namespace WizardGrenade
                 _crosshair.Draw(spriteBatch);
 
                 spriteBatch.DrawString(_font, "power: " + _fireballSpeed.ToString("0"),
-                    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 100), Color.Yellow);
+                    new Vector2(Utility.GetHorizontalCentre(200), Utility.ScreenWidth() - 100), Color.Yellow);
                 spriteBatch.DrawString(_font, "State: " + _State,
-                    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 80), Color.Yellow);
+                    new Vector2(Utility.GetHorizontalCentre(200), Utility.ScreenWidth() - 80), Color.Yellow);
                 spriteBatch.DrawString(_font, "Stable: " + stable,
-                    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 60), Color.Yellow);
+                    new Vector2(Utility.GetHorizontalCentre(200), Utility.ScreenWidth() - 60), Color.Yellow);
                 spriteBatch.DrawString(_font, "Velicty: " + velocity.X.ToString("0.0") + ", " + velocity.Y.ToString("0.0"),
-                    new Vector2(WizardGrenadeGame.SCREEN_WIDTH - 100, WizardGrenadeGame.SCREEN_HEIGHT - 40), Color.Yellow);
+                    new Vector2(Utility.GetHorizontalCentre(200), Utility.ScreenWidth() - 40), Color.Yellow);
             }
             else if (!_dead)
             {

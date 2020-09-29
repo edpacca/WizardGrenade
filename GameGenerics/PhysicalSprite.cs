@@ -170,7 +170,7 @@ namespace WizardGrenade
             spriteBatch.Draw(_spriteTexture, position + _rotationOffset,
                 size, Color.White, rotation, Vector2.Zero, 1, spriteEffect, layerDepth);
 
-            //DrawCollisionPoints(spriteBatch, position);
+            DrawCollisionPoints(spriteBatch, position);
         }
     }
 }
